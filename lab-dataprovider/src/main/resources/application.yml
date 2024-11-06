@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: lab-dataprovider
+  jackson:
+    # Não retorna campo nulo no response
+    default-property-inclusion: non_null
+  data:
+    mongodb:
+      # Local
+      #      uri: mongodb://root:qwe123@localhost:27017/spring-studious-lab-aws-database?authSource=admin
+      # Cloud
+      uri: mongodb://root:qwe123@mongo-dev:27017/spring-studious-lab-aws-database?authSource=admin
+  autoconfigure:
+    exclude:
+      # Exclusão de autoconfiguração JPA/Hibernate
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+
+  # Configuração para Cloud AWS (LocalStack)
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID}
+        secret-key: ${AWS_SECRET_ACCESS_KEY}
+      region:
+        static: ${AWS_REGION}
+      sns:
+        endpoint: ${AWS_SNS_ENDPOINT}
+      sqs:
+        endpoint: ${AWS_SQS_ENDPOINT}
+        queues:
+          partial: ${SQS_QUEUE_PARTIAL}
+          total: ${SQS_QUEUE_TOTAL}
+          overmeasure: ${SQS_QUEUE_OVERMEASURE}
+
+  logging:
+    level:
+      root: ${LOGGING_LEVEL:info}
+      org:
+        springframework:
+          data:
+            mongodb:
+              core:
+                MongoTemplate: INFO
+              repository:
+                query: INFO

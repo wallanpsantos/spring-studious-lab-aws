@@ -1,0 +1,50 @@
+name: "CodeQL Analysis"
+
+on:
+  push:
+    branches: [ main ]  # Execute nas branches principais
+  pull_request:
+    # Monitora pull requests para a branch "main"
+    branches: [ main ]
+  schedule:
+    - cron: '0 5 * * 1'  # Executa a análise semanalmente às 5h da segunda-feira
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+
+    permissions:
+      actions: read
+      contents: read
+      security-events: write  # Necessário para repositórios privados para publicar resultados de segurança
+
+    strategy:
+      matrix:
+        language: [ 'java' ]  # Adicione outras linguagens aqui se necessário (ex.: 'javascript', 'python')
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          database-upgrades: true  # Ativa suporte para repositórios privados
+          # Se você tiver uma customização do CodeQL:
+          # config-file: .github/codeql/codeql-config.yml
+
+      # Autobuild tenta construir qualquer linguagem compilada (C/C++, C# ou Java).
+      # Se esta etapa falhar, você deve removê-la e executar a construção manualmente (veja abaixo)
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Build the code
+        run: |
+          # Comando para rodar o build da aplicação (exemplo para Maven):
+          mvn clean install -DskipTests
+          # Se você usar outro sistema de build, substitua o comando acima.
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

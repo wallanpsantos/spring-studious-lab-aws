@@ -1,0 +1,92 @@
+networks:
+  developer-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  localstack_data:
+
+services:
+  # Ambiente AWS local
+  localstack:
+    container_name: localstack-main
+    image: localstack/localstack
+    ports:
+      - "127.0.0.1:4566:4566"
+      - "127.0.0.1:4510-4559:4510-4559"
+    env_file: .env
+    environment:
+      SERVICES: sns,sqs,s3
+      DEBUG: "${DEBUG:-0}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:-TESTlocalstack}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:-TESTlocalstack}"
+      AWS_REGION: "${AWS_REGION:-us-east-1}"
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./localstack/init-s3-bucket.sh:/etc/localstack/init/ready.d/init-s3-bucket.sh
+      - ./localstack/init-sns-topic.sh:/etc/localstack/init/ready.d/init-sns-topic.sh
+      - ./localstack/init-sqs-queue.sh:/etc/localstack/init/ready.d/init-sqs-queue.sh
+      - ./localstack/subscribe-sqs-to-sns.sh:/etc/localstack/init/ready.d/subscribe-sqs-to-sns.sh
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4566/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 90s
+    networks:
+      - developer-network
+  #    command: >
+  #      /bin/sh -c "apk add --no-cache bash && pip install python-dotenv && docker-entrypoint.sh"
+
+  # Banco de dados NoSQL
+  mongo-dev:
+    image: mongo:latest
+    container_name: mongo-dev
+    hostname: mongo-dev
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MY_MONGO_INITDB_ROOT_USERNAME}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MY_MONGO_INITDB_ROOT_PASSWORD}"
+    ports:
+      - "${MY_MONGO_PORT}:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo mongo-dev:27017/test --quiet
+      interval: 30s
+      timeout: 2s
+      retries: 5
+      start_period: 10s
+    networks:
+      - developer-network
+
+  # Aplicação
+  spring-studious-lab-aws-service:
+    container_name: lab-service
+    hostname: spring-studious-lab-aws-service
+    image: spring-studious-lab-aws-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      SPRING_DATA_MONGODB_HOST: mongo-dev
+      SPRING_DATA_MONGODB_PORT: "${MY_MONGO_PORT}"
+      SPRING_DATA_MONGODB_DATABASE: spring-studious-lab-aws-database
+      SPRING_DATA_MONGODB_USERNAME: "${MY_MONGO_INITDB_ROOT_USERNAME}"
+      SPRING_DATA_MONGODB_PASSWORD: "${MY_MONGO_INITDB_ROOT_PASSWORD}"
+      SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE: admin
+      SPRING_CLOUD_AWS_SNS_ENDPOINT: "${AWS_SNS_ENDPOINT:-http://localstack:4566}"
+      SPRING_CLOUD_AWS_SQS_ENDPOINT: "${AWS_SQS_ENDPOINT:-http://localstack:4566}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:-TESTlocalstack}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:-TESTlocalstack}"
+      AWS_REGION: "${AWS_REGION:-us-east-1}"
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mongo-dev
+      - localstack
+    networks:
+      - developer-network
+
+

@@ -1,0 +1,9 @@
+<settings>
+    <servers>
+        <server>
+            <id>github</id> <!-- O mesmo id que está no distributionManagement do pom.xml -->
+            <username>${env.GITHUB_ACTOR}</username> <!-- Usuário GitHub -->
+            <password>${env.GITHUB_TOKEN}</password> <!-- Token GitHub -->
+        </server>
+    </servers>
+</settings>

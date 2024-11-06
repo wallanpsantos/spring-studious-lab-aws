@@ -1,0 +1,40 @@
+name: Docker Image CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  login:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4  # Faz o checkout do código
+
+      # Configura o Docker para autenticação
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Definindo o nome da imagem com base no repositório e tag SHA do commit
+      - name: Build the Docker image
+        run: |
+          IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
+          docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      # Faz o push para o Docker Hub ou outro registry
+      - name: Push the Docker image
+        run: |
+          IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
+          docker push $IMAGE_NAME
+
+      # Adiciona uma tag "latest" à imagem para facilitar o versionamento
+      - name: Tag image as latest
+        run: |
+          IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
+          docker tag $IMAGE_NAME ${{ github.repository }}:latest
+          docker push ${{ github.repository }}:latest
