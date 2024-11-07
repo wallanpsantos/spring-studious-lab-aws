@@ -6,6 +6,9 @@ on:
   push:
     branches:
       - main  # Executa o workflow em push para a branch main (você pode especificar outras branches ou "qualquer branch" com '*')
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
