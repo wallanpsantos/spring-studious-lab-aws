@@ -2,28 +2,26 @@ name: "CodeQL Analysis"
 
 on:
   push:
-    branches: [ main ]  # Executa nas branches principais
+    branches: [ main ]  # Execute nas branches principais
   pull_request:
-    branches: [ main ]  # Monitora pull requests para a branch "main"
+    # Monitora pull requests para a branch "main"
+    branches: [ main ]
   schedule:
-    - cron: '0 5 * * 1'  # Executa a análise semanalmente às 5h da segunda-feira (UTC)
+    - cron: '0 5 * * 1'  # Executa a análise semanalmente às 5h da segunda-feira
 
 jobs:
   analyze:
-    name: Analyze (${{ matrix.language }})
-    runs-on: ${{ (matrix.language == 'swift' && 'macos-latest') || 'ubuntu-latest' }}
+    name: Analyze
+    runs-on: ubuntu-latest
 
     permissions:
       actions: read
       contents: read
-      packages: read
       security-events: write  # Necessário para repositórios privados para publicar resultados de segurança
 
     strategy:
-      fail-fast: false
       matrix:
         language: [ 'java' ]  # Adicione outras linguagens aqui se necessário (ex.: 'javascript', 'python')
-        build-mode: [ 'auto', 'manual' ]  # Configura modos de build para testes
 
     steps:
       - name: Checkout repository
@@ -34,16 +32,13 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           database-upgrades: true  # Ativa suporte para repositórios privados
-          # Descomente se você tiver um arquivo de configuração personalizado para o CodeQL:
-          # config-file: .github/codeql/codeql-config.yml
-          build-mode: ${{ matrix.build-mode }}
 
+      # Autobuild tenta construir qualquer linguagem compilada (C/C++, C# ou Java).
+      # Se esta etapa falhar, você deve removê-la e executar a construção manualmente (veja abaixo)
       - name: Autobuild
-        if: matrix.build-mode == 'auto'
         uses: github/codeql-action/autobuild@v3
 
       - name: Build the code
-        if: matrix.build-mode == 'manual'
         run: |
           # Comando para rodar o build da aplicação (exemplo para Maven):
           mvn clean install -DskipTests
@@ -51,5 +46,3 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{ matrix.language }}"
