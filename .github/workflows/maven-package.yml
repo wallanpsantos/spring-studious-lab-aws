@@ -2,34 +2,82 @@ name: Maven Package
 
 on:
   release:
-    types: [ created ]  # Executa o workflow quando uma release é criada
+    types: [created]  # Executa o workflow quando uma release é criada
   push:
-    branches: [ main ]  # Executa o workflow em push para a branch main (você pode especificar outras branches ou "qualquer branch" com '*')
+    branches: [main]  # Executa o workflow em push para a branch main
   pull_request:
-    branches: [ main ] # Monitora pull requests para a branch "main"
+    branches: [main]  # Monitora pull requests para a branch "main"
+  schedule:
+    - cron: '0 5 * * 1'  # Executa semanalmente às 5h da segunda-feira (UTC)
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write  # Necessário para publicar pacotes no GitHub Packages
-
     steps:
       - uses: actions/checkout@v4  # Faz o checkout do código
+      
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'  # Altere para a versão do Java que seu projeto usa (ex: '17', '21')
-          distribution: 'temurin'  # Define a distribuição do JDK
-          cache: maven # Armazene em cache as dependências do Maven para acelerar execuções subsequentes do workflow
-          server-id: github  # Esse id deve coincidir com o <id> definido no pom.xml
-          settings-path: ${{ github.workspace }}/.github  # O caminho do settings.xml
+          java-version: '21'
+          distribution: 'temurin'
+      
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build and test with Maven
+        run: mvn -B clean test
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-results
+          path: target/surefire-reports/  # Diretório de relatórios de teste do Surefire
+
+  deploy:
+    needs: test  # Executa o job de deploy apenas se o job de teste passar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4  # Faz o checkout do código
+      
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml  # Compila o projeto
-
-      - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s $GITHUB_WORKSPACE/.github/settings.xml  # Faz o deploy do pacote para o GitHub Packages
+      
+      - name: Publish to GitHub Packages
+        run: mvn deploy -DskipTests -Drevision=${{ github.sha }} -s $GITHUB_WORKSPACE/.github/settings.xml
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Usa o token gerado automaticamente pelo GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify on Failure
+        if: failure()  # Executa apenas em caso de falha no deploy
+        uses: rtCamp/action-slack-notify@v2  # Usando a ação Slack Send
+        with:
+          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}  # URL do webhook do Slack configurado nos segredos
+          message: "❗ O workflow Maven falhou no repositório ${{ github.repository }} no job de deploy."
+          username: "GitHub Actions Bot"  # Nome que será exibido como autor da mensagem
+          icon_emoji: ":warning:"  # Emoji que será exibido como ícone
+          color: "#FF0000"  # Cor da barra lateral na mensagem de falha
+      
+      - name: Clean up
+        if: always()
+        run: mvn clean  # Limpeza pós-execução para liberar espaço e evitar resíduos
