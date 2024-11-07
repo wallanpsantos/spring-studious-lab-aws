@@ -4,11 +4,9 @@ on:
   release:
     types: [ created ]  # Executa o workflow quando uma release é criada
   push:
-    branches:
-      - main  # Executa o workflow em push para a branch main (você pode especificar outras branches ou "qualquer branch" com '*')
+    branches: [ main ]  # Executa o workflow em push para a branch main (você pode especificar outras branches ou "qualquer branch" com '*')
   pull_request:
-    branches:
-      - main
+    branches: [ main ] # Monitora pull requests para a branch "main"
 
 jobs:
   build:
