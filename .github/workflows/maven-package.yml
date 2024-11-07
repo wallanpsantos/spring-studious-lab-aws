@@ -15,15 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4  # Faz o checkout do código
-
+      
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-
+      
       - name: Cache Maven dependencies
-        uses: actions/cache@v4  # Atualizado para a última versão
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -35,7 +35,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v4  # Atualizado para a última versão
+        uses: actions/upload-artifact@v3
         with:
           name: test-results
           path: target/surefire-reports/  # Diretório de relatórios de teste do Surefire
@@ -45,15 +45,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4  # Faz o checkout do código
-
+      
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-
+      
       - name: Cache Maven dependencies
-        uses: actions/cache@v4  # Atualizado para a última versão
+        uses: actions/cache@v3
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -62,22 +62,22 @@ jobs:
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml  # Compila o projeto
-
+      
       - name: Publish to GitHub Packages
         run: mvn deploy -DskipTests -Drevision=${{ github.sha }} -s $GITHUB_WORKSPACE/.github/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Notify on Failure
-        if: failure()
-        uses: rtCamp/action-slack-notify@v2  # Mantenha o Slack para uso futuro
-        with:
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          message: "❗ O workflow Maven falhou no repositório ${{ github.repository }} no job de deploy."
-          username: "GitHub Actions Bot"
-          icon_emoji: ":warning:"
-          color: "#FF0000"
-
+      #- name: Notify on Failure
+      #  if: failure()  # Executa apenas em caso de falha no deploy
+      #  uses: rtCamp/action-slack-notify@v2  # Usando a ação Slack Send
+      #  with:
+      #    webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}  # URL do webhook do Slack configurado nos segredos
+      #    message: "❗ O workflow Maven falhou no repositório ${{ github.repository }} no job de deploy."
+      #    username: "GitHub Actions Bot"  # Nome que será exibido como autor da mensagem
+      #    icon_emoji: ":warning:"  # Emoji que será exibido como ícone
+      #    color: "#FF0000"  # Cor da barra lateral na mensagem de falha
+      
       - name: Clean up
         if: always()
         run: mvn clean  # Limpeza pós-execução para liberar espaço e evitar resíduos
