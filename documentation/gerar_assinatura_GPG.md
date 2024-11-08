@@ -1,9 +1,7 @@
----
-
 # Como Configurar a Assinatura de Commits com GPG e Autenticação para o GitHub
 
-Este guia abrange desde a geração de uma chave GPG até a configuração de autenticação segura para o GitHub,
-com passos detalhados para garantir que seus commits estejam assinados e autenticados corretamente.
+Este guia abrange desde a geração de uma chave GPG até a configuração de autenticação segura para o GitHub, com passos
+detalhados para garantir que seus commits estejam assinados e autenticados corretamente.
 
 ---
 
@@ -27,8 +25,8 @@ com passos detalhados para garantir que seus commits estejam assinados e autenti
 5. **Preencha as Informações do Usuário**:
     - Insira o **nome** e o **e-mail** associados à sua conta do GitHub.
     - Para e-mail, você pode utilizar o e-mail gerado pelo GitHub para operações de Git (por exemplo,
-      `1233556+username@users.noreply.github.com`).
-      Esse e-mail pode ser encontrado em [GitHub Settings > Emails](https://github.com/settings/emails).
+      `1233556+username@users.noreply.github.com`). Esse e-mail pode ser encontrado
+      em [GitHub Settings > Emails](https://github.com/settings/emails).
 
 6. **Defina uma Senha para a Chave**:
     - Essa senha será solicitada ao assinar commits.
@@ -45,7 +43,7 @@ com passos detalhados para garantir que seus commits estejam assinados e autenti
       ```
 
 2. **Exportar a Chave Pública**:
-    - Substitua `<ID_DA_CHAVE>` pelo ID da chave obtido acima (fica logo após ```sec rsa4096/```):
+    - Substitua `<ID_DA_CHAVE>` pelo ID da chave obtido acima (fica logo após `sec rsa4096/`):
 
       ```bash
       gpg --armor --export <ID_DA_CHAVE>
@@ -117,9 +115,9 @@ com passos detalhados para garantir que seus commits estejam assinados e autenti
 
 3. **Assinando Commits Antigos com o GPG**:
 
-   Caso deseje assinar commits antigos, você pode utilizar o comando `git rebase`. **Atenção:** esse comando reescreve o
-   histórico de commits,
-   incluindo datas e autores, então use com cuidado.
+   Caso deseje assinar commits antigos, você pode utilizar o comando `git rebase`.
+
+   > **Atenção!**: Esse comando reescreve o histórico de commits, incluindo datas e autores dos commits.
 
    O comando a seguir modifica o autor e assina os commits antigos:
 
@@ -129,6 +127,64 @@ com passos detalhados para garantir que seus commits estejam assinados e autenti
 
 ---
 
-Com essas configurações, todos os seus commits estarão assinados e autenticados corretamente no GitHub.
-Você estará usando uma chave GPG para garantir a integridade dos seus commits e autenticação segura com HTTPS ou SSH
-para interações com o repositório remoto.
+## Problema com SSH ou envio de alteração (PUSH)
+
+1. **Caso esteja pedindo User e Password, impedindo de realizar o PUSH**:
+
+   Isso ocorre porque agora estamos usando o e-mail gerado pelo GitHub para operações de Git, para isso precisa
+   atualizar o SSH.
+
+   Gere uma nova chave SSH:
+
+   ```bash
+   ssh-keygen -t ed25519 -C "1233556+username@users.noreply.github.com"
+   ```
+
+   Copie a chave ssh pública:
+
+   ```bash
+   cat ~/.ssh/id_ed25519.pub
+   ```
+
+   Defina o valor global para o e-mail privado do Git:
+
+   ```bash
+   git config --global user.email "1233556+username@users.noreply.github.com"
+   ```
+
+   Para o User pode utilizar o seu username ou Nome:
+
+   ```bash
+   git config --global user.name "usernameexemplo"
+   ```
+
+   No projeto que está trabalhando se conecte novamente com o repositório remoto:
+
+   ```bash
+   git remote set-url origin git@github.com:usernameexemplo/repository.git
+   ```
+
+   Agora pode enviar suas alterações normalmente usando o `PUSH`:
+
+   ```bash
+   git push
+   ```
+
+   Deve aparecer algo como:
+
+   ```bash
+   Enumerating objects: 6, done.
+   Counting objects: 100% (6/6), done.
+   Delta compression using up to 16 threads
+   Compressing objects: 100% (4/4), done.
+   Writing objects: 100% (4/4), 2.79 KiB | 317.00 KiB/s, done.
+   Total 4 (delta 1), reused 0 (delta 0), pack-reused 0
+   remote: Resolving deltas: 100% (1/1), completed with 1 local object.
+   To github.com:usernameexemplo/repository.git
+   ```
+
+---
+
+*Com essas configurações, todos os seus commits estarão assinados e autenticados corretamente no GitHub.* Você estará
+usando uma chave GPG para garantir a integridade dos seus commits e autenticação segura com HTTPS ou SSH para interações
+com o repositório remoto.
