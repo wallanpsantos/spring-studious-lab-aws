@@ -26,12 +26,13 @@ jobs:
       - name: Define Docker Image Name
         id: image_name
         run: |
-          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref_type }}" == "tag" ]; then
+          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref }}" == refs/tags/* ]]; then
             echo "IMAGE_NAME=${{ github.repository }}:${{ github.ref_name }}" >> $GITHUB_ENV
           elif [ "${{ github.event_name }}" == "release" ]; then
             echo "IMAGE_NAME=${{ github.repository }}:${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
             echo "IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+          fi
 
       - name: Build the Docker image
         run: |
