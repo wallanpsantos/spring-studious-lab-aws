@@ -3,8 +3,10 @@ name: Docker Image CI/CD
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags: # Executa o workflow ao bater uma tag
+      - 'v*'  # Assumindo que as tags seguem o formato "vX.X.X"
+  release:
+    types: [ published ] # Executa o workflow ao publicar uma nova release
 
 jobs:
   login:
@@ -20,21 +22,27 @@ jobs:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Definindo o nome da imagem com base no repositório e tag SHA do commit
+      # Definindo o nome da imagem com base no repositório e tag SHA do commit ou tag de release
       - name: Build the Docker image
         run: |
-          IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
+          if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref_type }}" == "tag" ]; then
+            IMAGE_NAME=${{ github.repository }}:${{ github.ref_name }}
+          elif [ "${{ github.event_name }}" == "release" ]; then
+            IMAGE_NAME=${{ github.repository }}:${{ github.event.release.tag_name }}
+          else
+            IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
+          fi
           docker build . --file Dockerfile --tag $IMAGE_NAME
 
       # Faz o push para o Docker Hub ou outro registry
       - name: Push the Docker image
         run: |
-          IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
           docker push $IMAGE_NAME
 
-      # Adiciona uma tag "latest" à imagem para facilitar o versionamento
+      # Adiciona uma tag "latest" para builds na branch "main" e faz o push da imagem
       - name: Tag image as latest
+        if: github.ref == 'refs/heads/main'  # Executa esta etapa apenas na branch "main"
         run: |
-          IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
-          docker tag $IMAGE_NAME ${{ github.repository }}:latest
-          docker push ${{ github.repository }}:latest
+          IMAGE_NAME=${{ github.repository }}:latest
+          docker tag $IMAGE_NAME
+          docker push $IMAGE_NAME
