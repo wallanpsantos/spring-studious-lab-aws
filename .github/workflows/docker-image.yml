@@ -7,6 +7,8 @@ on:
       - 'v*'  # Assumindo que as tags seguem o formato "vX.X.X"
   release:
     types: [ published ] # Executa o workflow ao publicar uma nova release
+  pull_request:
+    branches: [ "main" ] # Executa o workflow ao abrir PR
 
 jobs:
   login:
