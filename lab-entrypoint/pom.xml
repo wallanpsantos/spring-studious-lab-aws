@@ -6,7 +6,7 @@
     <parent>
         <groupId>br.com.spring-studious-lab-aws</groupId>
         <artifactId>spring-studious-lab-aws</artifactId>
-        <version>1.0.1</version>
+        <version>2.0.0</version>
         <relativePath>../pom.xml</relativePath> <!-- Herda a versão do projeto principal -->
     </parent>
 
