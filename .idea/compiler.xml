@@ -16,8 +16,8 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.6.2/mapstruct-1.6.2.jar" />
         </processorPath>
         <module name="lab-core" />
-        <module name="lab-entrypoint" />
         <module name="lab-dataprovider" />
+        <module name="lab-entrypoint" />
       </profile>
     </annotationProcessing>
   </component>

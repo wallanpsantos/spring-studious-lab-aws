@@ -6,8 +6,8 @@
 
     <groupId>br.com.spring-studious-lab-aws</groupId>
     <artifactId>spring-studious-lab-aws</artifactId>
-    <version>1.0.1</version>
     <packaging>pom</packaging>
+    <version>${project.main.version}</version> <!-- Define a versão diretamente aqui -->
     <name>spring-studious-lab-aws</name>
     <description>spring-studious-lab-aws</description>
 
@@ -19,29 +19,9 @@
         <relativePath/>
     </parent>
 
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
-
-    <!-- Módulos do projeto -->
-    <modules>
-        <module>lab-core</module>
-        <module>lab-dataprovider</module>
-        <module>lab-entrypoint</module>
-    </modules>
-
     <!-- Propriedades de versões centralizadas -->
     <properties>
+        <project.main.version>1.0.1</project.main.version> <!-- Propriedade para uso nos módulos -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
@@ -64,6 +44,13 @@
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
     </properties>
+
+    <!-- Módulos do projeto -->
+    <modules>
+        <module>lab-core</module>
+        <module>lab-dataprovider</module>
+        <module>lab-entrypoint</module>
+    </modules>
 
     <dependencies>
         <!-- Dependências do Ecossistema Spring -->
