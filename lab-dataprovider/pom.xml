@@ -6,7 +6,7 @@
     <parent>
         <groupId>br.com.spring-studious-lab-aws</groupId>
         <artifactId>spring-studious-lab-aws</artifactId>
-        <version>${project.main.version}</version>
+        <version>1.0.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -30,11 +30,7 @@
     </scm>
 
     <dependencies>
-        <!-- Dependências do Spring Data JPA -->
-        <!--        <dependency>-->
-        <!--            <groupId>org.springframework.boot</groupId>-->
-        <!--            <artifactId>spring-boot-starter-data-jpa</artifactId>-->
-        <!--        </dependency>-->
+        <!-- Dependências do Spring Database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
