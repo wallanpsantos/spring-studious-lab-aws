@@ -1,4 +1,4 @@
-name: Build Java Multi-Module Project
+name: Build and Test Java Multi-Module Project
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +33,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean install
 
-      - name: Run tests
+      - name: Run Tests
         run: mvn test
 
       - name: Package Application
