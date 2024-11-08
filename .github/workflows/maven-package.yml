@@ -23,7 +23,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Cache Maven dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -35,7 +35,7 @@ jobs:
 
       - name: Upload test results
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-results
           path: target/surefire-reports/
@@ -63,7 +63,6 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
           cache: 'maven'
-          cache-dependency-path: 'sub-project/pom.xml' # optional
 
       - name: Build with Maven
         run: mvn -B package --file pom.xml  # Compila o projeto
