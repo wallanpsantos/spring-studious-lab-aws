@@ -2,26 +2,26 @@ name: Maven Package
 
 on:
   release:
-    types: [created]  # Executa o workflow quando uma release é criada
+    types: [created]
   push:
-    branches: [main]  # Executa o workflow em push para a branch main
+    branches: [main]
   pull_request:
-    branches: [main]  # Monitora pull requests para a branch "main"
+    branches: [main]
   schedule:
-    - cron: '0 5 * * 1'  # Executa semanalmente às 5h da segunda-feira (UTC)
+    - cron: '0 5 * * 1'
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # Faz o checkout do código
-      
+      - uses: actions/checkout@v4
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-      
+
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -38,20 +38,22 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: test-results
-          path: target/surefire-reports/  # Diretório de relatórios de teste do Surefire
+          path: target/surefire-reports/
 
   deploy:
-    needs: test  # Executa o job de deploy apenas se o job de teste passar
+    needs: test
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4  # Faz o checkout do código
-      
+      - uses: actions/checkout@v4
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
-      
+          server-id: github
+          settings-path: ${{ github.workspace }}/.github
+
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
@@ -61,24 +63,24 @@ jobs:
             ${{ runner.os }}-maven-
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml  # Compila o projeto
-      
+        run: mvn -B package --file pom.xml
+
       - name: Publish to GitHub Packages
-#        run: mvn deploy -DskipTests -Drevision=${{ github.sha }} -s $GITHUB_WORKSPACE/.github/settings.xml
         run: mvn deploy -DskipTests -s $GITHUB_WORKSPACE/.github/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      #- name: Notify on Failure
-      #  if: failure()  # Executa apenas em caso de falha no deploy
-      #  uses: rtCamp/action-slack-notify@v2  # Usando a ação Slack Send
-      #  with:
-      #    webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}  # URL do webhook do Slack configurado nos segredos
-      #    message: "❗ O workflow Maven falhou no repositório ${{ github.repository }} no job de deploy."
-      #    username: "GitHub Actions Bot"  # Nome que será exibido como autor da mensagem
-      #    icon_emoji: ":warning:"  # Emoji que será exibido como ícone
-      #    color: "#FF0000"  # Cor da barra lateral na mensagem de falha
-      
+      # Notificação no Slack (opcional - descomente para usar)
+      # - name: Notify on Failure
+      #   if: failure()
+      #   uses: rtCamp/action-slack-notify@v2
+      #   with:
+      #     webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     message: "❗ O workflow Maven falhou no repositório ${{ github.repository }} no job de deploy."
+      #     username: "GitHub Actions Bot"
+      #     icon_emoji: ":warning:"
+      #     color: "#FF0000"
+
       - name: Clean up
         if: always()
-        run: mvn clean  # Limpeza pós-execução para liberar espaço e evitar resíduos
+        run: mvn clean
