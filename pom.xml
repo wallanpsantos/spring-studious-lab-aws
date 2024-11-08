@@ -7,7 +7,7 @@
     <groupId>br.com.spring-studious-lab-aws</groupId>
     <artifactId>spring-studious-lab-aws</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.1</version> <!-- Replicar nos outros pacotes/modulos -->
+    <version>1.0.1-${buildNumber}</version> <!-- Replicar nos outros pacotes/modulos -->
     <name>spring-studious-lab-aws</name>
     <description>spring-studious-lab-aws</description>
 
@@ -21,6 +21,7 @@
 
     <!-- Propriedades de versões centralizadas -->
     <properties>
+        <buildNumber>versionBuild</buildNumber>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
