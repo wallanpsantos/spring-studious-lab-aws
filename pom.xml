@@ -21,7 +21,7 @@
 
     <!-- Propriedades de versões centralizadas -->
     <properties>
-        <project.main.version>1.0.1</project.main.version> <!-- Propriedade para uso nos módulos -->
+        <project.main.version>1.0.4</project.main.version> <!-- Propriedade para uso nos módulos -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
