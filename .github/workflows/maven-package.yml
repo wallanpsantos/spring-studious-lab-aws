@@ -2,11 +2,11 @@ name: Maven Package
 
 on:
   release:
-    types: [created]
+    types: [ created ]
   push:
-    branches: [main]
+    branches: [ main ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
   schedule:
     - cron: '0 5 * * 1'
 
@@ -43,32 +43,35 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    permissions:
+      contents: read
+      packages: write  # Necessário para publicar pacotes no GitHub Packages
 
+    steps:
+      - uses: actions/checkout@v4  # Faz o checkout do código
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
-          distribution: 'temurin'
-          server-id: github
-          settings-path: ${{ github.workspace }}/.github
+          java-version: '21'  # Altere para a versão do Java que seu projeto usa (ex: '17', '21')
+          distribution: 'temurin'  # Define a distribuição do JDK
+          cache: maven # Armazene em cache as dependências do Maven para acelerar execuções subsequentes do workflow
+          server-id: github  # Esse id deve coincidir com o <id> definido no pom.xml
+          settings-path: ${{ github.workspace }}/.github  # O caminho do settings.xml
 
-      - name: Cache Maven dependencies
-        uses: actions/cache@v3
+      - uses: actions/setup-java@v4
         with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+          cache-dependency-path: 'sub-project/pom.xml' # optional
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml
+        run: mvn -B package --file pom.xml  # Compila o projeto
 
-      - name: Publish to GitHub Packages
-        run: mvn deploy -DskipTests -s $GITHUB_WORKSPACE/.github/settings.xml
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn deploy -s $GITHUB_WORKSPACE/.github/settings.xml  # Faz o deploy do pacote para o GitHub Packages
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Usa o token gerado automaticamente pelo GitHub Actions
 
       # Notificação no Slack (opcional - descomente para usar)
       # - name: Notify on Failure
