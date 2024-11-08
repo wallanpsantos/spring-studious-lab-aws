@@ -64,7 +64,8 @@ jobs:
         run: mvn -B package --file pom.xml  # Compila o projeto
       
       - name: Publish to GitHub Packages
-        run: mvn deploy -DskipTests -Drevision=${{ github.sha }} -s $GITHUB_WORKSPACE/.github/settings.xml
+#        run: mvn deploy -DskipTests -Drevision=${{ github.sha }} -s $GITHUB_WORKSPACE/.github/settings.xml
+        run: mvn deploy -DskipTests -s $GITHUB_WORKSPACE/.github/settings.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

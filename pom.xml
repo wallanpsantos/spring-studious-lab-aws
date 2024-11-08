@@ -7,7 +7,7 @@
     <groupId>br.com.spring-studious-lab-aws</groupId>
     <artifactId>spring-studious-lab-aws</artifactId>
     <packaging>pom</packaging>
-    <version>${project.main.version}</version> <!-- Define a versão diretamente aqui -->
+    <version>${project.main.version}</version>
     <name>spring-studious-lab-aws</name>
     <description>spring-studious-lab-aws</description>
 
@@ -122,12 +122,6 @@
             <version>${log4j-core.version}</version>
         </dependency>
 
-        <!-- Dependências do conversor de JSON -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson-databind.version}</version>
-        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -169,8 +163,7 @@
     <distributionManagement>
         <repository>
             <id>github</id>
-            <url>https://maven.pkg.github.com/wallanpsantos/spring-studious-lab-aws
-            </url>
+            <url>https://maven.pkg.github.com/wallanpsantos/spring-studious-lab-aws</url>
         </repository>
     </distributionManagement>
 
