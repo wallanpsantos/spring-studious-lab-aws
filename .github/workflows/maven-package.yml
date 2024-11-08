@@ -1,34 +1,47 @@
-name: Maven Package
+name: Build and Test Java Multi-Module Project
 
 on:
-  release:
-    types: [ created ]  # Executa o workflow quando uma release é criada
   push:
     branches:
-      - main  # Executa o workflow em push para a branch main (você pode especificar outras branches ou "qualquer branch" com '*')
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  build_and_test:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write  # Necessário para publicar pacotes no GitHub Packages
 
     steps:
-      - uses: actions/checkout@v4  # Faz o checkout do código
+      - name: Check out the repository
+        uses: actions/checkout@v4 # Checkout do código
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          java-version: '21'  # Altere para a versão do Java que seu projeto usa (ex: '17', '21')
-          distribution: 'temurin'  # Define a distribuição do JDK
-          cache: maven # Armazene em cache as dependências do Maven para acelerar execuções subsequentes do workflow
-          server-id: github  # Esse id deve coincidir com o <id> definido no pom.xml
-          settings-path: ${{ github.workspace }}/.github  # O caminho do settings.xml
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Build with Maven
-        run: mvn -B package --file pom.xml  # Compila o projeto
+        run: mvn -B clean install
 
-      - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s $GITHUB_WORKSPACE/.github/settings.xml  # Faz o deploy do pacote para o GitHub Packages
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Usa o token gerado automaticamente pelo GitHub Actions
+      - name: Run Tests
+        run: mvn test
+
+      - name: Package Application
+        run: mvn package
+
+      - name: Archive build artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: jar-files
+          path: '**/target/*.jar'
