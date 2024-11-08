@@ -66,7 +66,7 @@ jobs:
         run: mvn -B package --file pom.xml  # Compila o projeto
 
       - name: Publish to GitHub Packages Apache Maven
-        run: mvn deploy -s $GITHUB_WORKSPACE/.github/settings.xml  # Faz o deploy do pacote para o GitHub Packages
+        run: mvn deploy -DskipTests -DskipRemoteStaging=true -s $GITHUB_WORKSPACE/.github/settings.xml # Faz o deploy do pacote para o GitHub Packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Usa o token gerado automaticamente pelo GitHub Actions
 

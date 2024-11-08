@@ -7,7 +7,7 @@
     <groupId>br.com.spring-studious-lab-aws</groupId>
     <artifactId>spring-studious-lab-aws</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.0</version> <!-- Replicar nos outros pacotes/modulos -->
+    <version>1.0.1</version> <!-- Replicar nos outros pacotes/modulos -->
     <name>spring-studious-lab-aws</name>
     <description>spring-studious-lab-aws</description>
 
@@ -42,6 +42,7 @@
         <spring-cloud-aws-dependencies.version>3.2.1</spring-cloud-aws-dependencies.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
     </properties>
 
     <!-- Módulos do projeto -->
@@ -119,6 +120,14 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j-core.version}</version>
+        </dependency>
+
+        <!-- Automatizar Alteração de Versões -->
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>versions-maven-plugin</artifactId>
+            <version>${versions-maven-plugin.version}</version>
+            <!-- Comando para mudar versão todos pom.xml: mvn versions:set -DnewVersion=1.x.x -->
         </dependency>
 
     </dependencies>
