@@ -3,48 +3,46 @@ name: Docker Image CI/CD
 on:
   push:
     branches: [ "main" ]
-    tags: # Executa o workflow ao bater uma tag
-      - 'v*'  # Assumindo que as tags seguem o formato "vX.X.X"
+    tags:
+      - 'v*'
   release:
-    types: [ published ] # Executa o workflow ao publicar uma nova release
+    types: [ published ]
   pull_request:
-    branches: [ "main" ] # Executa o workflow ao abrir PR
+    branches: [ "main" ]
 
 jobs:
   login:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4  # Faz o checkout do código
+      - uses: actions/checkout@v4
 
-      # Configura o Docker para autenticação
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ vars.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Definindo o nome da imagem com base no repositório e tag SHA do commit ou tag de release
-      - name: Build the Docker image
+      - name: Define Docker Image Name
+        id: image_name
         run: |
           if [ "${{ github.event_name }}" == "push" ] && [ "${{ github.ref_type }}" == "tag" ]; then
-            IMAGE_NAME=${{ github.repository }}:${{ github.ref_name }}
+            echo "IMAGE_NAME=${{ github.repository }}:${{ github.ref_name }}" >> $GITHUB_ENV
           elif [ "${{ github.event_name }}" == "release" ]; then
-            IMAGE_NAME=${{ github.repository }}:${{ github.event.release.tag_name }}
+            echo "IMAGE_NAME=${{ github.repository }}:${{ github.event.release.tag_name }}" >> $GITHUB_ENV
           else
-            IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)
-          fi
+            echo "IMAGE_NAME=${{ github.repository }}:$(echo $GITHUB_SHA | head -c7)" >> $GITHUB_ENV
+
+      - name: Build the Docker image
+        run: |
           docker build . --file Dockerfile --tag $IMAGE_NAME
 
-      # Faz o push para o Docker Hub ou outro registry
       - name: Push the Docker image
         run: |
           docker push $IMAGE_NAME
 
-      # Adiciona uma tag "latest" para builds na branch "main" e faz o push da imagem
       - name: Tag image as latest
-        if: github.ref == 'refs/heads/main'  # Executa esta etapa apenas na branch "main"
+        if: github.ref == 'refs/heads/main'
         run: |
-          IMAGE_NAME=${{ github.repository }}:latest
-          docker tag $IMAGE_NAME
-          docker push $IMAGE_NAME
+          docker tag $IMAGE_NAME ${{ github.repository }}:latest
+          docker push ${{ github.repository }}:latest
