@@ -30,6 +30,7 @@ detalhados para garantir que seus commits estejam assinados e autenticados corre
 
 6. **Defina uma Senha para a Chave**:
     - Essa senha será solicitada ao assinar commits.
+    - Mais a frente da documentação, vou mostra como "salvar a senha" em cache para não solicitar toda vez que commitar
 
 ---
 
@@ -93,19 +94,12 @@ detalhados para garantir que seus commits estejam assinados e autenticados corre
       ```
 
 2. **Configurar Cache de Senha do Agente GPG**:
-    - Edite o arquivo `~/.gnupg/gpg-agent.conf`:
 
+    - Execute o comando:
       ```bash
-      nano ~/.gnupg/gpg-agent.conf
+      nano ~/.gnupg/gpg-agent.conf && echo -e "default-cache-ttl 3600\nmax-cache-ttl 36000" >> ~/.gnupg/gpg-agent.conf
       ```
-      
-      Cole o código abaixo:
-
-      ```plaintext
-      default-cache-ttl 3600
-      max-cache-ttl 36000
-      ```
-
+   
     - Explicação:
         - `default-cache-ttl 3600`: Define o tempo padrão para o cache da senha como **3600 segundos** (ou seja, **1
           hora**).
