@@ -191,9 +191,8 @@ Após seguir estes passos, o Docker e o Docker Compose devem estar instalados e 
 guia cobre as configurações iniciais e resolução de erros comuns para garantir que você possa utilizar o Docker no WSL
 sem problemas.
 
-
-
 ---
+<br/>
 
 # 📜 Tutorial Docker e Docker Compose com exemplos de Comandos Essenciais
 
@@ -485,8 +484,6 @@ Valida e exibe o `docker-compose.yml`.
 
 Esse comando ajuda a verificar se o arquivo `docker-compose.yml` está correto antes de rodar o `up`.
 
----
-
 ## Conclusão
 
 Esses comandos cobrem as operações mais comuns e essenciais para o gerenciamento de contêineres e orquestração de
@@ -495,6 +492,7 @@ serviços com Docker e Docker Compose.
 Eles permitem desde a criação de contêineres simples até a configuração de ambientes complexos com múltiplos serviços.
 
 ---
+<br/>
 
 # 📜 Tutorial: Configurando Docker para Rodar sem `sudo` e Executar `docker compose` sem Manter o Daemon Sempre Ativo
 
@@ -646,8 +644,6 @@ docker compose up -d
 
 Após 60 segundos sem contêineres em execução, o `dockerd` será automaticamente desligado.
 
----
-
 ## Conclusão
 
 Com essas configurações, você poderá:
@@ -660,3 +656,4 @@ Esse método proporciona um uso mais conveniente e controlado do Docker no seu s
 Se precisar ajustar o tempo de inatividade, basta modificar o valor do `sleep` no script `docker-check.sh`.
 
 ---
+<br/>
