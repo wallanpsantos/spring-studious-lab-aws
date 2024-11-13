@@ -95,6 +95,12 @@ detalhados para garantir que seus commits estejam assinados e autenticados corre
 2. **Configurar Cache de Senha do Agente GPG**:
     - Edite o arquivo `~/.gnupg/gpg-agent.conf`:
 
+      ```bash
+      nano ~/.gnupg/gpg-agent.conf
+      ```
+      
+      Cole o código abaixo:
+
       ```plaintext
       default-cache-ttl 3600
       max-cache-ttl 36000
