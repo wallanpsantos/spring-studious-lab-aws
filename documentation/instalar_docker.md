@@ -191,8 +191,10 @@ Após seguir estes passos, o Docker e o Docker Compose devem estar instalados e 
 guia cobre as configurações iniciais e resolução de erros comuns para garantir que você possa utilizar o Docker no WSL
 sem problemas.
 
+
 ---
 <br/>
+
 
 # 📜 Tutorial Docker e Docker Compose com exemplos de Comandos Essenciais
 
@@ -494,6 +496,7 @@ Eles permitem desde a criação de contêineres simples até a configuração de
 ---
 <br/>
 
+
 # 📜 Tutorial: Configurando Docker para Rodar sem `sudo` e Executar `docker compose` sem Manter o Daemon Sempre Ativo
 
 Este tutorial guia você para configurar o Docker e o Docker Compose para rodarem sem a necessidade de `sudo`.
@@ -657,3 +660,4 @@ Se precisar ajustar o tempo de inatividade, basta modificar o valor do `sleep` n
 
 ---
 <br/>
+
