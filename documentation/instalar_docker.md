@@ -190,3 +190,307 @@ necessidade de permissões adicionais.
 Após seguir estes passos, o Docker e o Docker Compose devem estar instalados e funcionando no seu ambiente WSL. Este
 guia cobre as configurações iniciais e resolução de erros comuns para garantir que você possa utilizar o Docker no WSL
 sem problemas.
+
+
+
+---
+
+# Tutorial Docker e Docker Compose com exemplos de Comandos Essenciais
+
+Este guia cobre os principais comandos para utilizar Docker e Docker Compose, que agora é integrado ao Docker CLI nas
+versões mais recentes.
+
+## Seção 1: Comandos Básicos do Docker
+
+Esses comandos ajudam a gerenciar contêineres, imagens, redes e volumes no Docker.
+
+### 1. `docker pull`
+
+Baixa uma imagem do Docker Hub ou de um repositório remoto.
+
+   ```bash
+   docker pull nginx
+   ```
+
+Esse comando baixa a última versão da imagem do Nginx.
+
+### 2. `docker run`
+
+Cria e inicia um contêiner a partir de uma imagem.
+
+   ```bash
+   docker run -d -p 8080:80 --name meu_nginx nginx
+   ```
+
+Este comando cria e executa um contêiner Nginx em modo **detached** (`-d`), mapeando a porta 80 do contêiner para a
+porta 8080 do host, e nomeia o contêiner como `meu_nginx`.
+
+### 3. `docker ps`
+
+Lista todos os contêineres em execução.
+
+   ```bash
+   docker ps
+   ```
+
+Para listar todos os contêineres, incluindo os que estão parados, use:
+
+   ```bash
+   docker ps -a
+   ```
+
+### 4. `docker stop`
+
+Para um contêiner em execução.
+
+   ```bash
+   docker stop meu_nginx
+   ```
+
+Esse comando para o contêiner chamado `meu_nginx`.
+
+### 5. `docker start`
+
+Inicia um contêiner parado.
+
+   ```bash
+   docker start meu_nginx
+   ```
+
+Inicia o contêiner `meu_nginx` que foi parado.
+
+### 6. `docker rm`
+
+Remove um contêiner parado.
+
+   ```bash
+   docker rm meu_nginx
+   ```
+
+Para remover todos os contêineres parados de uma vez:
+
+   ```bash
+   docker rm $(docker ps -a -q)
+   ```
+
+### 7. `docker rmi`
+
+Remove uma imagem do Docker.
+
+   ```bash
+   docker rmi nginx
+   ```
+
+Para remover todas as imagens não utilizadas:
+
+   ```bash
+   docker rmi $(docker images -q)
+   ```
+
+### 8. `docker exec`
+
+Executa um comando dentro de um contêiner em execução.
+
+   ```bash
+   docker exec -it meu_nginx /bin/bash
+   ```
+
+Este comando abre um terminal interativo (`-it`) dentro do contêiner `meu_nginx`.
+
+### 9. `docker logs`
+
+Exibe os logs de um contêiner.
+
+   ```bash
+   docker logs meu_nginx
+   ```
+
+Para acompanhar os logs em tempo real, use o parâmetro `-f`:
+
+   ```bash
+   docker logs -f meu_nginx
+   ```
+
+### 10. `docker inspect`
+
+Exibe informações detalhadas sobre um contêiner ou imagem.
+
+   ```bash
+   docker inspect meu_nginx
+   ```
+
+### 11. `docker images`
+
+Lista todas as imagens locais.
+
+   ```bash
+   docker images
+   ```
+
+### 12. `docker build`
+
+Cria uma imagem a partir de um `Dockerfile`.
+
+   ```bash
+   docker build -t minha_imagem:latest .
+   ```
+
+Este comando cria uma imagem chamada `minha_imagem` usando o `Dockerfile` no diretório atual.
+
+### 13. `docker network ls`
+
+Lista todas as redes Docker.
+
+   ```bash
+   docker network ls
+   ```
+
+### 14. `docker network create`
+
+Cria uma nova rede Docker.
+
+   ```bash
+   docker network create minha_rede
+   ```
+
+### 15. `docker network connect`
+
+Conecta um contêiner a uma rede.
+
+   ```bash
+   docker network connect minha_rede meu_nginx
+   ```
+
+---
+
+## Seção 2: Comandos do Docker Compose (Nova Versão: `docker compose`)
+
+Esses comandos são específicos para Docker Compose, usado para orquestrar múltiplos contêineres.
+
+### 1. `docker compose up`
+
+Inicia todos os serviços definidos no `docker-compose.yml`.
+
+   ```bash
+   docker compose up
+   ```
+
+Para executar em segundo plano (modo detached), use `-d`:
+
+   ```bash
+   docker compose up -d
+   ```
+
+### 2. `docker compose down`
+
+Para e remove contêineres, redes e volumes criados pelo `docker compose up`.
+
+   ```bash
+   docker compose down
+   ```
+
+Para remover volumes também:
+
+   ```bash
+   docker compose down -v
+   ```
+
+### 3. `docker compose ps`
+
+Lista todos os contêineres gerenciados pelo Docker Compose.
+
+   ```bash
+   docker compose ps
+   ```
+
+### 4. `docker compose build`
+
+Constrói (ou reconstrói) imagens dos serviços definidos no `docker-compose.yml`.
+
+   ```bash
+   docker compose build
+   ```
+
+Para reconstruir uma imagem específica:
+
+   ```bash
+   docker compose build nome_do_servico
+   ```
+
+### 5. `docker compose stop`
+
+Para todos os contêineres gerenciados pelo Docker Compose.
+
+   ```bash
+   docker compose stop
+   ```
+
+### 6. `docker compose start`
+
+Inicia todos os contêineres parados gerenciados pelo Docker Compose.
+
+   ```bash
+   docker compose start
+   ```
+
+### 7. `docker compose restart`
+
+Reinicia os contêineres.
+
+   ```bash
+   docker compose restart
+   ```
+
+### 8. `docker compose logs`
+
+Exibe os logs de todos os serviços.
+
+   ```bash
+   docker compose logs
+   ```
+
+Para ver logs de um serviço específico:
+
+   ```bash
+   docker compose logs nome_do_servico
+   ```
+
+Para acompanhar os logs em tempo real:
+
+   ```bash
+   docker compose logs -f
+   ```
+
+### 9. `docker compose exec`
+
+Executa um comando em um contêiner gerenciado pelo Docker Compose.
+
+   ```bash
+   docker compose exec nome_do_servico comando
+   ```
+
+Exemplo: Acessar o terminal de um contêiner específico:
+
+   ```bash
+   docker compose exec nome_do_servico /bin/bash
+   ```
+
+### 10. `docker compose config`
+
+Valida e exibe o `docker-compose.yml`.
+
+   ```bash
+   docker compose config
+   ```
+
+Esse comando ajuda a verificar se o arquivo `docker-compose.yml` está correto antes de rodar o `up`.
+
+---
+
+## Conclusão
+
+Esses comandos cobrem as operações mais comuns e essenciais para o gerenciamento de contêineres e orquestração de
+serviços com Docker e Docker Compose.
+Eles permitem desde a criação de contêineres simples até a configuração de ambientes complexos com múltiplos serviços.
+
+---
