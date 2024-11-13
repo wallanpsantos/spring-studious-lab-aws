@@ -1,4 +1,4 @@
-# Tutorial Completo: Instalando e Configurando Docker e Docker Compose no WSL (Windows Subsystem for Linux)
+# 📜 Tutorial Completo: Instalando e Configurando Docker e Docker Compose no WSL (Windows Subsystem for Linux)
 
 Este tutorial guia você pela instalação do Docker e Docker Compose no WSL, abordando erros comuns e suas soluções.
 
@@ -195,7 +195,7 @@ sem problemas.
 
 ---
 
-# Tutorial Docker e Docker Compose com exemplos de Comandos Essenciais
+# 📜 Tutorial Docker e Docker Compose com exemplos de Comandos Essenciais
 
 Este guia cobre os principais comandos para utilizar Docker e Docker Compose, que agora é integrado ao Docker CLI nas
 versões mais recentes.
@@ -496,11 +496,12 @@ Eles permitem desde a criação de contêineres simples até a configuração de
 
 ---
 
-# Tutorial: Configurando Docker para Rodar sem `sudo` e Executar `docker compose` sem Manter o Daemon Sempre Ativo
+# 📜 Tutorial: Configurando Docker para Rodar sem `sudo` e Executar `docker compose` sem Manter o Daemon Sempre Ativo
 
 Este tutorial guia você para configurar o Docker e o Docker Compose para rodarem sem a necessidade de `sudo`.
 <br/>
-Além disso, vamos criar um script que verifica se o Docker Daemon (`dockerd`) está ativo, iniciando-o apenas quando
+<b>(Windows com WSL) ➡️</b> Criar um script que verifica se o Docker Daemon (`dockerd`) está ativo,
+iniciando-o apenas quando
 necessário e desligando-o automaticamente após um período de inatividade.
 
 ## Passo 1: Permitir que Docker Rode sem `sudo`
