@@ -634,11 +634,11 @@ script `docker-check.sh`.
 Com o alias configurado, você pode rodar `docker compose` normalmente, e o `dockerd` será iniciado automaticamente se
 não estiver rodando.
 
-Por exemplo, para iniciar serviços com Docker Compose, basta usar:
+-   Por exemplo, para iniciar serviços com Docker Compose, basta usar:
 
-```bash
-docker compose up -d
-```
+    ```bash
+    docker compose up -d
+    ```
 
 ### Comportamento do Script
 
@@ -652,29 +652,29 @@ docker compose up -d
 ### Exemplo de Uso
 
 - **Inicie o Docker Compose com:**
-
-```bash
-docker compose up -d
-```
+   
+   ```bash
+   docker compose up -d
+   ```
 
 - **Visualize os logs mais recentes: Use o comando abaixo para listar os arquivos de log e verificar o mais recente:**
 
-```bash
-ls -lt /home/wallan/logs/dockerd/
-```
+   ```bash
+   ls -lt /home/wallan/logs/dockerd/
+   ```
 
 - **Monitorar o último log em tempo real:**
-
-```bash
-tail -f $(ls -t /home/wallan/logs/dockerd/ | head -n 1)
-```
+   
+   ```bash
+   tail -f $(ls -t /home/wallan/logs/dockerd/ | head -n 1)
+   ```
 
 - **Para escolher qual log monitorar em tempo real, use o comando:**
   <small>Substitua YYYYMMDD_HHMMSS pelo timestamp correspondente ao log atual.</small>
 
-```bash
-tail -f ~/logs/dockerd/dockerd_YYYYMMDD_HHMMSS.log
-```
+   ```bash
+   tail -f ~/logs/dockerd/dockerd_YYYYMMDD_HHMMSS.log
+   ```
 
 ## Conclusão
 
