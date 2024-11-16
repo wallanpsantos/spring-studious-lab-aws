@@ -652,7 +652,7 @@ Para tornar o uso do script mais fácil, vamos criar um alias para iniciar o `do
    source ~/.zshrc
    ```
 
-#### IMPORANTE ➡️ *Sempre que quiser iniciar o Docker Daemon e monitorar sua execução, rode o alias criado anteriormente:*.
+### IMPORTANTE ➡️ *Sempre que quiser iniciar o Docker Daemon e monitorar sua execução, rode o alias criado anteriormente:*.
 
    ```bash
    init-docker
