@@ -2,6 +2,7 @@ package br.com.springstudiouslabaws.labdataprovider.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,6 +13,10 @@ public class PaymentEntity {
 
     @Id
     private String clientId;
+
+    private String clientName;
+
+    private String clientEmail;
 
     private List<PaymentItemEntity> payments;
 
@@ -45,16 +50,31 @@ public class PaymentEntity {
         this.lastUpdate = lastUpdate;
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public String getClientEmail() {
+        return clientEmail;
+    }
+
+    public void setClientEmail(String clientEmail) {
+        this.clientEmail = clientEmail;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PaymentEntity that = (PaymentEntity) o;
-        return Objects.equals(clientId, that.clientId) && Objects.equals(payments, that.payments) && Objects.equals(lastUpdate, that.lastUpdate);
+        return Objects.equals(clientId, that.clientId) && Objects.equals(clientName, that.clientName) && Objects.equals(clientEmail, that.clientEmail) && Objects.equals(payments, that.payments) && Objects.equals(lastUpdate, that.lastUpdate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(clientId, payments, lastUpdate);
+        return Objects.hash(clientId, clientName, clientEmail, payments, lastUpdate);
     }
 }

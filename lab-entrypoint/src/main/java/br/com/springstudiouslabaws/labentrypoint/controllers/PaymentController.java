@@ -1,6 +1,7 @@
 package br.com.springstudiouslabaws.labentrypoint.controllers;
 
 import br.com.springstudiouslabaws.labentrypoint.dtos.request.PaymentRequestDTO;
+import br.com.springstudiouslabaws.labentrypoint.dtos.request.StartDebtRequestDTO;
 import br.com.springstudiouslabaws.labentrypoint.dtos.response.PaymentResponseDTO;
 import br.com.springstudiouslabaws.labentrypoint.facade.PaymentFacade;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class PaymentController {
     }
 
     @PostMapping("/payment")
-    public ResponseEntity<PaymentResponseDTO> createPayment(@Valid @RequestBody PaymentRequestDTO request) {
+    public ResponseEntity<PaymentResponseDTO> createPayment(@Valid @RequestBody StartDebtRequestDTO request) {
         PaymentResponseDTO response = paymentFacade.createPayment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

@@ -1,6 +1,7 @@
 package br.com.springstudiouslabaws.labdataprovider.entities;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ public class PaymentItemEntity {
     private String paymentId;
     private BigDecimal paymentValue;
     private String paymentStatus;
-    private LocalDateTime paymentDateTime;
+    private LocalDate dateFinalPayment;
     private BigDecimal originalAmount;
 
     public String getPaymentId() {
@@ -36,12 +37,12 @@ public class PaymentItemEntity {
         this.paymentStatus = paymentStatus;
     }
 
-    public LocalDateTime getPaymentDateTime() {
-        return paymentDateTime;
+    public LocalDate getDateFinalPayment() {
+        return dateFinalPayment;
     }
 
-    public void setPaymentDateTime(LocalDateTime paymentDateTime) {
-        this.paymentDateTime = paymentDateTime;
+    public void setDateFinalPayment(LocalDate dateFinalPayment) {
+        this.dateFinalPayment = dateFinalPayment;
     }
 
     public BigDecimal getOriginalAmount() {
@@ -57,12 +58,12 @@ public class PaymentItemEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PaymentItemEntity that = (PaymentItemEntity) o;
-        return Objects.equals(paymentId, that.paymentId) && Objects.equals(paymentValue, that.paymentValue) && Objects.equals(paymentStatus, that.paymentStatus) && Objects.equals(paymentDateTime, that.paymentDateTime) && Objects.equals(originalAmount, that.originalAmount);
+        return Objects.equals(paymentId, that.paymentId) && Objects.equals(paymentValue, that.paymentValue) && Objects.equals(paymentStatus, that.paymentStatus) && Objects.equals(dateFinalPayment, that.dateFinalPayment) && Objects.equals(originalAmount, that.originalAmount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(paymentId, paymentValue, paymentStatus, paymentDateTime, originalAmount);
+        return Objects.hash(paymentId, paymentValue, paymentStatus, dateFinalPayment, originalAmount);
     }
 }
 

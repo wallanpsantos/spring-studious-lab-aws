@@ -1,6 +1,7 @@
 package br.com.springstudiouslabaws.labdataprovider.repositories;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
+import br.com.springstudiouslabaws.labcore.domain.payment.StartDebitDomain;
 import br.com.springstudiouslabaws.labcore.repositories.PaymentRepository;
 import br.com.springstudiouslabaws.labdataprovider.config.mongodb.MongoPaymentRepository;
 import br.com.springstudiouslabaws.labdataprovider.entities.PaymentEntity;
@@ -31,5 +32,10 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         PaymentEntity entity = mapper.toEntity(paymentDomain);
         PaymentEntity savedEntity = mongoRepository.save(entity);
         return mapper.toDomain(savedEntity);
+    }
+
+    @Override
+    public StartDebitDomain save(StartDebitDomain startDebitDomain) {
+        return null;
     }
 }

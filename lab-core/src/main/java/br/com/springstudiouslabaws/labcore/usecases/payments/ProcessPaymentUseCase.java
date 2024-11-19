@@ -1,4 +1,4 @@
-package br.com.springstudiouslabaws.labcore.usecases;
+package br.com.springstudiouslabaws.labcore.usecases.payments;
 
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-import static br.com.springstudiouslabaws.labcore.enums.PaymentItemStatusEnum.fromString;
+import static br.com.springstudiouslabaws.labcore.enums.PaymentItemStatusEnum.verifyStatusUpdatePayment;
 
 @Service
 public class ProcessPaymentUseCase {
@@ -41,7 +41,7 @@ public class ProcessPaymentUseCase {
     }
 
     private void sendToQueueBasedOnStatus(PaymentDomain payment) {
-        PaymentItemStatusEnum status = fromString(payment.getPaymentItems().getFirst().getPaymentStatus());
+        PaymentItemStatusEnum status = verifyStatusUpdatePayment(payment.getPaymentItems().getFirst().getPaymentStatus());
         switch (status) {
             case PARTIAL -> sqsService.sendToPartialQueue(payment);
             case TOTAL -> sqsService.sendToTotalQueue(payment);
