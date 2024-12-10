@@ -183,8 +183,6 @@ Se preferir, você pode configurar o Docker Desktop para gerenciar o Docker Daem
 Isso permite que o Docker Desktop no Windows gerencie o daemon e o `docker.sock`, facilitando o uso do Docker no WSL sem
 necessidade de permissões adicionais.
 
----
-
 ## Conclusão
 
 Após seguir estes passos, o Docker e o Docker Compose devem estar instalados e funcionando no seu ambiente WSL. Este
@@ -194,7 +192,6 @@ sem problemas.
 
 ---
 <br/>
-
 
 # 📜 Tutorial Docker e Docker Compose com exemplos de Comandos Essenciais
 
@@ -496,7 +493,6 @@ Eles permitem desde a criação de contêineres simples até a configuração de
 ---
 <br/>
 
-
 # 📜 Tutorial: Configurando Docker para Rodar sem `sudo` e Executar `docker compose` sem Manter o Daemon Sempre Ativo
 
 Este tutorial guia você para configurar o Docker e o Docker Compose para rodarem sem a necessidade de `sudo`.
@@ -528,10 +524,10 @@ necessidade de `sudo`.
 
 ---
 
-## Passo 2: Criar um Script para Verificar e Iniciar o `dockerd` Automaticamente
+## **Passo 2: Criar um Script para Verificar e Iniciar o `dockerd` Automaticamente**
 
 Para evitar a necessidade de executar `sudo dockerd` sempre que precisar do Docker, vamos criar um script que inicia o
-`dockerd` automaticamente apenas quando necessário. Esse script também desligará o `dockerd` após um tempo de
+`dockerd` automaticamente apenas quando necessário. Esse script também desligará o `dockerd` após **8 horas** de
 inatividade.
 
 1. **Crie o Diretório para o Script**
@@ -542,7 +538,13 @@ inatividade.
    mkdir -p ~/bin
    ```
 
-2. **Crie o Script `docker-check.sh`**
+2. **Crie o diretório para os logs:**
+
+   ```bash
+   mkdir -p ~/logs/dockerd
+   ```
+
+3. **Crie o Script `docker-check.sh`**
 
    Crie um arquivo chamado `docker-check.sh` no diretório `~/bin`:
 
@@ -550,38 +552,65 @@ inatividade.
    nano ~/bin/docker-check.sh
    ```
 
-3. **Escreva o Código do Script**
+4. **Escreva o Código do Script**
 
    Insira o seguinte conteúdo no `docker-check.sh`:
 
    ```bash
    #!/bin/bash
-
+   
+   # Esse script faz o seguinte:
+   # 1. Verifica se o dockerd está ativo. Se não estiver, ele o inicia em segundo plano.
+   # 2. Usa sudo para iniciar o daemon com permissões adequadas.
+   # 3. Monitora o dockerd por algumas horas e o desliga se não houver contêineres em execução.
+   
+   LOG_DIR="$HOME/logs/dockerd"
+   LOG_FILE="${LOG_DIR}/dockerd_$(date +%Y%m%d_%H%M%S).log"
+   
+   # Certifique-se de que o diretório de logs existe
+   mkdir -p "$LOG_DIR"
+   
    # Verifica se o Docker daemon está em execução
    if ! pgrep -x "dockerd" > /dev/null; then
-       echo "Docker daemon não está em execução. Iniciando..."
-       nohup dockerd > /dev/null 2>&1 &
-       sleep 2  # Dá tempo para o dockerd iniciar
+       echo "Docker daemon não está em execução. Tentando iniciar com sudo..."
+       sudo nohup dockerd > "$LOG_FILE" 2>&1 &
+       sleep 5  # Aguarda alguns segundos para garantir que o dockerd tenha iniciado
+   
+       # Verifica novamente se o dockerd foi iniciado
+       if ! pgrep -x "dockerd" > /dev/null; then
+           echo "Erro: Não foi possível iniciar o Docker daemon. Verifique os logs em $LOG_FILE."
+           exit 1
+       fi
    fi
-
-   # Executa o comando docker compose passado como argumento
-   docker compose "$@"
-
-   # Espera um tempo (ex: 60 segundos) e desliga o dockerd se não houver contêineres em execução
-   sleep 60
+   
+   echo "Docker daemon está em execução."
+   echo "Logs do Docker estão sendo salvos em $LOG_FILE"
+   echo "Use 'tail -f $LOG_FILE' para monitorar os logs."
+   
+   # Verificar se ainda há contêineres em execução
+   END_TIME=$((SECONDS + 2 * 3600))  # Tempo final: 2 horas em segundos
+   
+   while [ $SECONDS -lt $END_TIME ]; do
+       if [ -n "$(docker ps -q)" ]; then
+           # Se houver contêineres em execução, aguarde mais 10 minuto antes de verificar novamente
+           sleep 600
+       else
+           echo "Nenhum contêiner em execução. Continuando a monitorar."
+           echo "Caso feche o terminal WSL, precisará rodar o script novamente."
+           sleep 600
+       fi
+   done
+   
+   # Verificar novamente e desliga o dockerd se necessário
    if [ -z "$(docker ps -q)" ]; then
        echo "Nenhum contêiner em execução. Parando o Docker daemon."
-       pkill dockerd
+       sudo pkill dockerd
+   else
+       echo "Contêineres ainda estão em execução. O Docker daemon continuará ativo."
    fi
    ```
 
-   Esse script faz o seguinte:
-    - Verifica se o `dockerd` está ativo. Se não estiver, ele o inicia em segundo plano.
-    - Executa o comando `docker compose` que você especificar.
-    - Aguarda 60 segundos e verifica se ainda há contêineres em execução. Se não houver, ele para o `dockerd`
-      automaticamente.
-
-4. **Torne o Script Executável**
+5. **Torne o Script Executável**
 
    Para garantir que o script funcione, torne-o executável:
 
@@ -591,21 +620,25 @@ inatividade.
 
 ---
 
-## Passo 3: Criar um Alias para Facilitar o Uso
+#### **Passo 3: Criar um Alias para Facilitar o Uso**
 
-Para tornar o uso do script mais fácil, vamos criar um alias para o comando `docker compose`, fazendo-o apontar para o
-script `docker-check.sh`.
+Para tornar o uso do script mais fácil, vamos criar um alias para iniciar o `dockerd`.
 
 1. Abra seu arquivo `.bashrc` ou `.zshrc` (dependendo do shell que você usa):
 
    ```bash
    nano ~/.bashrc
    ```
+   ou
+
+   ```bash
+   nano ~/.zshrc
+   ```
 
 2. Adicione o seguinte alias ao final do arquivo:
 
    ```bash
-   alias docker-compose="~/bin/docker-check.sh"
+   alias init-docker="~/bin/docker-check.sh"
    ```
 
 3. Salve e feche o arquivo, depois atualize o shell:
@@ -613,51 +646,30 @@ script `docker-check.sh`.
    ```bash
    source ~/.bashrc
    ```
+   ou
 
-Agora, você pode usar `docker compose` diretamente no terminal. O alias configurado redirecionará automaticamente para o
-script `docker-check.sh`.
+   ```bash
+   source ~/.zshrc
+   ```
 
----
+### IMPORTANTE ➡️ *Sempre que quiser iniciar o Docker Daemon e monitorar sua execução, rode o alias criado anteriormente:*.
 
-## Passo 4: Usar o Comando `docker compose` com o Novo Alias
+   ```bash
+   init-docker
+   ```
 
-Com o alias configurado, você pode rodar `docker compose` normalmente, e o `dockerd` será iniciado automaticamente se
-não estiver rodando.
+ou
 
-Por exemplo, para iniciar serviços com Docker Compose, basta usar:
+   ```bash
+   ~/bin/docker-check.sh
+   ```
 
-```bash
-docker compose up -d
-```
-
-### Comportamento do Script
-
-- **Se o `dockerd` não estiver rodando**: o script inicia o Docker Daemon automaticamente e então executa o comando
-  `docker compose`.
-- **Inatividade do `dockerd`**: após executar o comando `docker compose`, o script aguarda 60 segundos. Se não houver
-  contêineres em execução, o `dockerd` será desligado automaticamente.
-
-### Exemplo de Uso
-
-Inicie o Docker Compose com:
-
-```bash
-docker compose up -d
-```
-
-Após 60 segundos sem contêineres em execução, o `dockerd` será automaticamente desligado.
-
-## Conclusão
+### Conclusão
 
 Com essas configurações, você poderá:
 
-- Rodar comandos `docker` e `docker compose` sem precisar de `sudo`.
-- Iniciar o Docker Daemon (`dockerd`) automaticamente apenas quando necessário, sem deixá-lo sempre ativo.
-- Parar o `dockerd` automaticamente após um período de inatividade, economizando recursos.
-
-Esse método proporciona um uso mais conveniente e controlado do Docker no seu sistema.
-Se precisar ajustar o tempo de inatividade, basta modificar o valor do `sleep` no script `docker-check.sh`.
+- Iniciar o `dockerd` automaticamente apenas quando necessário.
+- Desligar o `dockerd` após um tempo se não houver contêineres em execução.
+- Evitar que o `dockerd` fique ativo desnecessariamente, economizando recursos.
 
 ---
-<br/>
-
