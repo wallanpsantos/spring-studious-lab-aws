@@ -15,20 +15,6 @@
     <description>Módulo Data Provider - Infraestrutura e Repositórios</description>
     <packaging>jar</packaging>
 
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
-
     <dependencies>
         <!-- Dependências do Spring Data JPA -->
         <!--        <dependency>-->
