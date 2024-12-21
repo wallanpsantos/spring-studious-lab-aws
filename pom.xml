@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>3.4.1</version>
         <relativePath/>
     </parent>
 
@@ -81,11 +81,17 @@
         <slf4j-api.version>2.0.16</slf4j-api.version>
         <log4j-core.version>2.24.2</log4j-core.version>
         <hamcrest.version>3.0</hamcrest.version>
-        <jackson-databind.version>2.18.1</jackson-databind.version>
+        <jackson-databind.version>2.18.2</jackson-databind.version>
         <easymock.version>5.5.0</easymock.version>
         <wiremock.version>3.10.0</wiremock.version>
         <spring-cloud.version>2024.0.0</spring-cloud.version>
         <spring-cloud-aws-dependencies.version>3.2.1</spring-cloud-aws-dependencies.version>
+
+        <!-- Versões de dependências para correção de conflitos e transitivas -->
+        <asm.version>9.6</asm.version>
+        <objenesis.version>3.4</objenesis.version>
+        <log4j-core.version>2.24.2</log4j-core.version>
+        <commons-io.version>2.18.0</commons-io.version>
 
         <!-- Versões de Plugins -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -94,6 +100,7 @@
         <maven-surefire-report-plugin.version>3.5.2</maven-surefire-report-plugin.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <maven-project-info-reports-plugin.version>3.8.0</maven-project-info-reports-plugin.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
 
         <!-- Configurações de Plugins -->
         <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
@@ -120,19 +127,19 @@
         </dependency>
 
         <!-- Dependências Cloud AWS -->
-        <dependency>
+        <dependency> <!-- Starter base para integração com AWS -->
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter</artifactId>
         </dependency>
-        <dependency>
+        <dependency> <!-- SNS: Serviço de mensageria pub/sub para notificações assíncronas -->
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-sns</artifactId>
         </dependency>
-        <dependency>
+        <dependency> <!-- SQS: Serviço de filas para processamento assíncrono de mensagens -->
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-sqs</artifactId>
         </dependency>
-        <dependency>
+        <dependency> <!-- S3: Armazenamento de objetos para arquivos e assets -->
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-s3</artifactId>
         </dependency>
@@ -210,6 +217,35 @@
                 <version>${mapstruct.version}</version>
                 <scope>provided</scope>
             </dependency>
+
+            <!-- Grupo: Correções de conflitos. E força todas as dependências transitivas a usarem a versões abaixo -->
+            <dependency>
+                <groupId>org.objenesis</groupId>
+                <artifactId>objenesis</artifactId>
+                <version>${objenesis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>${asm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-core</artifactId>
+                <version>${log4j-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io.version}</version>
+            </dependency>
+            <!-- Grupo: Correções de conflitos. -->
+
         </dependencies>
     </dependencyManagement>
 
@@ -296,6 +332,36 @@
                         </rule>
                     </rules>
                 </configuration>
+            </plugin>
+
+            <!-- Plugin para verificar dependências -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <!-- Define que o goal 'enforce' será executado automaticamente -->
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <!-- Maven 3.8.0 ou superior é requerido -->
+                                    <version>[3.8.0,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <!-- Java 21 ou superior é requerido -->
+                                    <version>[21,)</version>
+                                </requireJavaVersion>
+                                <!-- Garante que não existam versões conflitantes de dependência no projeto -->
+                                <dependencyConvergence/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
