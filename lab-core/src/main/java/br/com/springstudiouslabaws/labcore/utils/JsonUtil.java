@@ -141,7 +141,7 @@ public final class JsonUtil {
         try {
             return objectMapper.readValue(json, typeReference);
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao converter JSON para objeto: %s", e);
+            throw new RuntimeException("Erro ao converter JSON para o objeto de referencia: %s", e);
         }
     }
 
