@@ -52,6 +52,15 @@ import java.util.Optional;
  * MinhaClasse novoObjeto = JsonUtil.toObject(json, MinhaClasse.class);
  * }</pre>
  *
+ * <p><strong>Dependência Maven Necessária:</strong>
+ * <pre>
+ * &lt;dependency&gt;
+ *     &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
+ *     &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
+ *     &lt;version&gt;2.18.2&lt;/version&gt; <!-- ou superior -->
+ * &lt;/dependency&gt;
+ * </pre>
+ *
  * @see com.fasterxml.jackson.databind.ObjectMapper
  * @see com.fasterxml.jackson.core.type.TypeReference
  */
