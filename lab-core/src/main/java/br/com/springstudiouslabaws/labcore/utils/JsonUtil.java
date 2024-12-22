@@ -64,7 +64,7 @@ import java.util.Optional;
  * @see com.fasterxml.jackson.databind.ObjectMapper
  * @see com.fasterxml.jackson.core.type.TypeReference
  */
-@SuppressWarnings("ALL")
+@SuppressWarnings("unused")
 public final class JsonUtil {
 
     /**
