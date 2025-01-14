@@ -20,7 +20,7 @@ public record LoanResponseDTO(
         String description,
 
         @JsonProperty("valor_solicitado")
-        BigDecimal originalAmount,
+        BigDecimal amountRequested,
 
         @JsonProperty("data_final_vencimento")
         LocalDate dateFinalPayment
