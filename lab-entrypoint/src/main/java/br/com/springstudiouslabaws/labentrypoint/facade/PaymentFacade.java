@@ -1,7 +1,7 @@
 package br.com.springstudiouslabaws.labentrypoint.facade;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
-import br.com.springstudiouslabaws.labcore.usecases.ProcessPaymentUseCase;
+import br.com.springstudiouslabaws.labcore.usecases.payment.ProcessPaymentUseCase;
 import br.com.springstudiouslabaws.labentrypoint.dtos.request.PaymentRequestDTO;
 import br.com.springstudiouslabaws.labentrypoint.dtos.response.PaymentResponseDTO;
 import br.com.springstudiouslabaws.labentrypoint.mappers.DomainToDTOMapper;

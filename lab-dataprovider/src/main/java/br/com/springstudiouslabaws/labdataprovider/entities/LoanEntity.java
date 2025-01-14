@@ -4,6 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Document(collection = "loan")
@@ -17,7 +18,7 @@ public class LoanEntity {
     private BigDecimal amountRequested;
     private BigDecimal outstandingBalance;
     private String status;
-    private String dateFinalPayment;
+    private LocalDate dateFinalPayment;
     private PaymentsEntity payments;
     private ClientEntity client;
     private LocalDateTime lastUpdate;
@@ -70,11 +71,11 @@ public class LoanEntity {
         this.status = status;
     }
 
-    public String getDateFinalPayment() {
+    public LocalDate getDateFinalPayment() {
         return dateFinalPayment;
     }
 
-    public void setDateFinalPayment(String dateFinalPayment) {
+    public void setDateFinalPayment(LocalDate dateFinalPayment) {
         this.dateFinalPayment = dateFinalPayment;
     }
 

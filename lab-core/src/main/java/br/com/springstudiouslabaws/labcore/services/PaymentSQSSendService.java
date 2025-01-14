@@ -2,7 +2,7 @@ package br.com.springstudiouslabaws.labcore.services;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 
-public interface SqsSendService {
+public interface PaymentSQSSendService {
 
     void sendToPartialQueue(PaymentDomain paymentDomain);
     // Lógica para envio ao SQS da fila parcial
