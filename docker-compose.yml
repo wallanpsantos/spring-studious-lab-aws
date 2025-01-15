@@ -30,14 +30,12 @@ services:
       - ./localstack/subscribe-sqs-to-sns.sh:/etc/localstack/init/ready.d/subscribe-sqs-to-sns.sh
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:4566/health" ]
-      interval: 10s
-      timeout: 5s
+      interval: 20s
+      timeout: 10s
       retries: 5
       start_period: 90s
     networks:
       - developer-network
-  #    command: >
-  #      /bin/sh -c "apk add --no-cache bash && pip install python-dotenv && docker-entrypoint.sh"
 
   # Banco de dados NoSQL
   mongo-dev:

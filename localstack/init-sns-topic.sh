@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Utilizar o comando no terminal: chmod +x init-sns-topic.sh
+
 # Carrega variáveis do .env
 #export "$(grep -v '^#' .env | xargs)"
 
