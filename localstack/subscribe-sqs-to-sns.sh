@@ -15,4 +15,4 @@ awslocal sns subscribe \
   --notification-endpoint "arn:aws:sqs:$AWS_REGION:000000000000:$SQS_QUEUE_NAME"
 
 # Mensagem de sucesso
-echo "Subscribed SQS queue '$SQS_QUEUE_NAME' to SNS topic '$SNS_TOPIC_NAME' com sucesso no LocalStack."
+echo "Subscribed SQS queue '$SQS_QUEUE_NAME' to SNS topic '$SNS_TOPIC_NAME' com ✅ sucesso no LocalStack."

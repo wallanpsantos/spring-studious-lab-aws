@@ -14,4 +14,4 @@ TOPIC_NAME="$SNS_TOPIC_NAME"
 awslocal sns create-topic --name "$TOPIC_NAME"
 
 # Mensagem de sucesso
-echo "SNS topic '$TOPIC_NAME' criado com sucesso no LocalStack."
+echo "SNS topic '$TOPIC_NAME' criado com ✅ sucesso no LocalStack."

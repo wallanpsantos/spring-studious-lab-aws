@@ -15,4 +15,4 @@ BUCKET_NAME="$S3_BUCKET_NAME"
 awslocal s3api create-bucket --bucket "$BUCKET_NAME"
 
 # Mensagem de sucesso
-echo "Bucket '$BUCKET_NAME' criado com sucesso no LocalStack."
+echo "Bucket '$BUCKET_NAME' criado com ✅ sucesso no LocalStack."
