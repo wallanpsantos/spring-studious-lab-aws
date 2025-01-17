@@ -9,8 +9,6 @@ spring:
     default-property-inclusion: non_null
   data:
     mongodb:
-      # Local
-      #      uri: mongodb://root:qwe123@localhost:27017/spring-studious-lab-aws-database?authSource=admin
       # Cloud
       uri: mongodb://root:qwe123@mongo-dev:27017/spring-studious-lab-aws-database?authSource=admin
   autoconfigure:

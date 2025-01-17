@@ -24,14 +24,13 @@ public class PaymentController {
         this.paymentFacade = paymentFacade;
     }
 
-    @PostMapping
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<PaymentResponseDTO> createPayment(@Valid @RequestBody PaymentRequestDTO request) {
         PaymentResponseDTO response = paymentFacade.createPayment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping(consumes = "application/json",
-            produces = "application/json")
+    @PutMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<PaymentResponseDTO> setPayment(@Valid @RequestBody PaymentRequestDTO request) {
         PaymentResponseDTO response = paymentFacade.processPayment(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
