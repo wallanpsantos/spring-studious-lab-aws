@@ -4,13 +4,11 @@ server:
 spring:
   application:
     name: lab-entrypoint
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   jackson:
     # Não retorna campo nulo no response
     default-property-inclusion: non_null
-  data:
-    mongodb:
-      # Cloud
-      uri: mongodb://root:qwe123@mongo-dev:27017/spring-studious-lab-aws-database?authSource=admin
   autoconfigure:
     exclude:
       # Exclusão de autoconfiguração JPA/Hibernate

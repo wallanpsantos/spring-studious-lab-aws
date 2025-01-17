@@ -1,6 +1,5 @@
 # No IntelliJ, adicione a configuração abaixo, para subir local e se comunicar com o docker.
 # VM Options: -Dspring.profiles.active=local
-
 spring:
   cloud:
     aws:
