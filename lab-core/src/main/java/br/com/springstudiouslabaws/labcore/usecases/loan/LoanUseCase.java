@@ -26,6 +26,6 @@ public class LoanUseCase {
 
         log.info("Empréstimo salvo: {}", loan);
 
-        return null;
+        return loan;
     }
 }
