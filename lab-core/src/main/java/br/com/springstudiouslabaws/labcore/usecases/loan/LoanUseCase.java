@@ -22,6 +22,8 @@ public class LoanUseCase {
 
     public LoanDomain processLoan(LoanDomain loanDomain) {
 
+        loanDomain.validate();
+
         LoanDomain loan = repository.save(loanDomain);
 
         log.info("Empréstimo salvo: {}", loan);

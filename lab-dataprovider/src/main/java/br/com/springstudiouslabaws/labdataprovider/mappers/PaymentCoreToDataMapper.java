@@ -2,19 +2,19 @@ package br.com.springstudiouslabaws.labdataprovider.mappers;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 import br.com.springstudiouslabaws.labdataprovider.entities.PaymentsEntity;
-import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", // Define que o mapper será gerenciado pelo Spring Framework
+        unmappedTargetPolicy = ReportingPolicy.IGNORE, // ignorar campos não mapeados e a não emitir avisos.
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE) // não mapear nulo do objeto fonte
 public interface PaymentCoreToDataMapper {
 
-    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE) // ignorar campos não mapeados e a não emitir avisos.
-//    @Mapping(source = "paymentItems", target = "payments")
+    //    @Mapping(source = "paymentItems", target = "payments")
     PaymentsEntity toEntity(PaymentDomain domain);
 
-    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE) // ignorar campos não mapeados e a não emitir avisos.
-//    @Mapping(source = "payments", target = "paymentItems")
+    //    @Mapping(source = "payments", target = "paymentItems")
     PaymentDomain toDomain(PaymentsEntity entity);
 }
 
