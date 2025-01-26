@@ -1,5 +1,6 @@
 package br.com.springstudiouslabaws.labentrypoint.dtos.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
@@ -36,6 +37,7 @@ public record LoanRequestDTO(
 
         @NotNull(message = "Data de vencimento do empréstimo não pode ser nula")
         @Future(message = "Data de vencimento deve ser uma data futura")
+        @JsonFormat(pattern = "[dd/MM/yyyy][dd-MM-yyyy]") /// aceita ambos formatos de data (27/04/2025 ou 27-04-2025)
         @JsonProperty("data_final_vencimento")
         LocalDate dateFinalPayment
 ) {
