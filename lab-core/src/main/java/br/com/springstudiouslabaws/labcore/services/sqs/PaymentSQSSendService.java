@@ -1,4 +1,4 @@
-package br.com.springstudiouslabaws.labcore.services;
+package br.com.springstudiouslabaws.labcore.services.sqs;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 

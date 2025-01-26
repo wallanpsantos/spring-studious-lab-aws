@@ -1,8 +1,6 @@
 package br.com.springstudiouslabaws.labentrypoint.dtos.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies.SnakeCaseStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Future;
@@ -12,7 +10,6 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@JsonNaming(SnakeCaseStrategy.class)
 public record LoanRequestDTO(
 
         @NotBlank(message = "Identificador do cliente não pode ser nulo ou vazio")

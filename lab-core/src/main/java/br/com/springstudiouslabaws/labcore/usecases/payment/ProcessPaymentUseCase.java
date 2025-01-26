@@ -4,7 +4,7 @@ import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 import br.com.springstudiouslabaws.labcore.enums.PaymentItemStatusEnum;
 import br.com.springstudiouslabaws.labcore.exceptions.PaymentNotFoundException;
 import br.com.springstudiouslabaws.labcore.repositories.PaymentRepository;
-import br.com.springstudiouslabaws.labcore.services.PaymentSQSSendService;
+import br.com.springstudiouslabaws.labcore.services.sqs.PaymentSQSSendService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;

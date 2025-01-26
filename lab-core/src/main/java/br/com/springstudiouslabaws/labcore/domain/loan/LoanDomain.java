@@ -4,8 +4,8 @@ import br.com.springstudiouslabaws.labcore.exceptions.BusinessException;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 public class LoanDomain {
@@ -22,6 +22,9 @@ public class LoanDomain {
     String description;
     BigDecimal amountRequested;
     LocalDate dateFinalPayment;
+    String loanId;
+    LocalDateTime lastUpdate;
+    String status;
 
     // Validação completa do domínio
     public void validate() {
@@ -137,27 +140,42 @@ public class LoanDomain {
         this.dateFinalPayment = dateFinalPayment;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-        LoanDomain that = (LoanDomain) o;
-        return Objects.equals(clientId, that.clientId) && Objects.equals(name, that.name) && Objects.equals(email, that.email) && Objects.equals(description, that.description) && Objects.equals(amountRequested, that.amountRequested) && Objects.equals(dateFinalPayment, that.dateFinalPayment);
+    public LocalDateTime getLastUpdate() {
+        return lastUpdate;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(clientId, name, email, description, amountRequested, dateFinalPayment);
+    public void setLastUpdate(LocalDateTime lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
+
+    public String getLoanId() {
+        return loanId;
+    }
+
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "LoanDomain{" +
-                "clientId='" + clientId + '\'' +
+                "amountRequested=" + amountRequested +
+                ", clientId='" + clientId + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", description='" + description + '\'' +
-                ", amountRequested=" + amountRequested +
                 ", dateFinalPayment=" + dateFinalPayment +
+                ", loanId='" + loanId + '\'' +
+                ", lastUpdate=" + lastUpdate +
+                ", status='" + status + '\'' +
                 '}';
     }
 }

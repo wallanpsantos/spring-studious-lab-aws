@@ -5,6 +5,7 @@ import br.com.springstudiouslabaws.labcore.repositories.LoanRepository;
 import br.com.springstudiouslabaws.labdataprovider.config.mongodb.MongoLoanRespository;
 import br.com.springstudiouslabaws.labdataprovider.entities.LoanEntity;
 import br.com.springstudiouslabaws.labdataprovider.mappers.LoanCoreToDataMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -13,9 +14,9 @@ public class LoanRepositoryImpl implements LoanRepository {
     private final MongoLoanRespository mongoRepository;
     private final LoanCoreToDataMapper mapper;
 
-    public LoanRepositoryImpl(MongoLoanRespository mongoRepository, LoanCoreToDataMapper mapper) {
-        this.mongoRepository = mongoRepository;
+    public LoanRepositoryImpl(@Qualifier("loanCoreToDataMapperImpl") LoanCoreToDataMapper mapper, MongoLoanRespository mongoRepository) {
         this.mapper = mapper;
+        this.mongoRepository = mongoRepository;
     }
 
     @Override

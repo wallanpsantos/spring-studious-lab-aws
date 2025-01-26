@@ -7,15 +7,6 @@ import java.time.LocalDate;
 
 public record LoanResponseDTO(
 
-        @JsonProperty("identificador_cliente")
-        String clientId,
-
-        @JsonProperty("nome")
-        String name,
-
-        @JsonProperty("email")
-        String email,
-
         @JsonProperty("descricao_emprestimo")
         String description,
 

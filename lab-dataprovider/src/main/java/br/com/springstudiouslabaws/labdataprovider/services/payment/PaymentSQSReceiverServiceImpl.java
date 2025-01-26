@@ -1,7 +1,7 @@
 package br.com.springstudiouslabaws.labdataprovider.services.payment;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
-import br.com.springstudiouslabaws.labcore.services.PaymentSQSReceiverService;
+import br.com.springstudiouslabaws.labcore.services.sqs.PaymentSQSReceiverService;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

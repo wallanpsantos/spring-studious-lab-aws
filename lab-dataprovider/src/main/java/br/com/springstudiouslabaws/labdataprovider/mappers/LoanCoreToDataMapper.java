@@ -2,6 +2,7 @@ package br.com.springstudiouslabaws.labdataprovider.mappers;
 
 import br.com.springstudiouslabaws.labcore.domain.loan.LoanDomain;
 import br.com.springstudiouslabaws.labdataprovider.entities.LoanEntity;
+import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -15,10 +16,10 @@ public interface LoanCoreToDataMapper {
     @Mapping(target = "client.clientId", source = "clientId")
     @Mapping(target = "client.clientName", source = "name")
     @Mapping(target = "client.clientEmail", source = "email")
-    @Mapping(target = "lastUpdate", expression = "java(java.time.LocalDateTime.now())")
-    @Mapping(target = "loanId", expression = "java(java.util.UUID.randomUUID().toString())")
-    @Mapping(target = "status", constant = "PENDING")
     LoanEntity toEntity(LoanDomain domain);
 
+    /// Mapeamento de volta (inverso) - Inverte automaticamente as configurações de mapeamento do toEntity
+    //  Equivalente a: @Mapping(target = "clientId", source = "client.clientId")
+    @InheritInverseConfiguration
     LoanDomain toDomain(LoanEntity entity);
 }
