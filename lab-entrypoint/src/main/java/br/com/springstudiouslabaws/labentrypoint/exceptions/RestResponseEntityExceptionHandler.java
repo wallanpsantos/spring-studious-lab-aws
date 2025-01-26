@@ -1,5 +1,6 @@
 package br.com.springstudiouslabaws.labentrypoint.exceptions;
 
+import br.com.springstudiouslabaws.labcore.exceptions.BusinessException;
 import br.com.springstudiouslabaws.labcore.exceptions.PaymentNotFoundException;
 import br.com.springstudiouslabaws.labdataprovider.exceptions.ApiErrorMessage;
 import br.com.springstudiouslabaws.labdataprovider.exceptions.ResourceNotFoundException;
@@ -34,6 +35,18 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
         error.setTimestamp(LocalDateTime.now());
 
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ApiErrorMessage> handleBusinessException(BusinessException ex, WebRequest request) {
+        ApiErrorMessage error = new ApiErrorMessage();
+        error.setTitle("Erro de Validação de Negócio");
+        error.setMessage(ex.getMessage());
+        error.setDescription(request.getDescription(false));
+        error.setStatusCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        error.setTimestamp(LocalDateTime.now());
+
+        return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
 

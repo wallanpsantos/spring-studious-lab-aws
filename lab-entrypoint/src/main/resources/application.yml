@@ -4,15 +4,14 @@ server:
 spring:
   application:
     name: lab-entrypoint
+  banner:
+    charset: UTF-8 # Ou UTF-8, us-ascii, dependendo do conteúdo
+    location: banner.txt
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   jackson:
     # Não retorna campo nulo no response
     default-property-inclusion: non_null
-  data:
-    mongodb:
-      # Local
-      #      uri: mongodb://root:qwe123@localhost:27017/spring-studious-lab-aws-database?authSource=admin
-      # Cloud
-      uri: mongodb://root:qwe123@mongo-dev:27017/spring-studious-lab-aws-database?authSource=admin
   autoconfigure:
     exclude:
       # Exclusão de autoconfiguração JPA/Hibernate

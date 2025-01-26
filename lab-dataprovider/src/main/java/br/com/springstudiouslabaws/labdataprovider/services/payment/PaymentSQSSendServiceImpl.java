@@ -1,8 +1,7 @@
-package br.com.springstudiouslabaws.labdataprovider.services;
+package br.com.springstudiouslabaws.labdataprovider.services.payment;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
-import br.com.springstudiouslabaws.labcore.services.SqsSendService;
-import io.awspring.cloud.sqs.annotation.SqsListener;
+import br.com.springstudiouslabaws.labcore.services.sqs.PaymentSQSSendService;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-public class SqsSendServiceImpl implements SqsSendService {
+public class PaymentSQSSendServiceImpl implements PaymentSQSSendService {
 
-    private static final Logger log = LoggerFactory.getLogger(SqsSendServiceImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(PaymentSQSSendServiceImpl.class);
 
     private final SqsTemplate sqsTemplate;
 
@@ -26,7 +25,7 @@ public class SqsSendServiceImpl implements SqsSendService {
     @Value("${spring.cloud.aws.sqs.queues.overmeasure}")
     private String overmeasureQueue;
 
-    public SqsSendServiceImpl(SqsTemplate sqsTemplate) {
+    public PaymentSQSSendServiceImpl(SqsTemplate sqsTemplate) {
         this.sqsTemplate = sqsTemplate;
     }
 

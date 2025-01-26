@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/api")
+@RequestMapping("/v1/pagamentos")
 @Validated
 public class PaymentController {
 
@@ -24,15 +24,13 @@ public class PaymentController {
         this.paymentFacade = paymentFacade;
     }
 
-    @PostMapping("/payment")
+    @PostMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<PaymentResponseDTO> createPayment(@Valid @RequestBody PaymentRequestDTO request) {
         PaymentResponseDTO response = paymentFacade.createPayment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping(value = "/payment",
-            consumes = "application/json",
-            produces = "application/json")
+    @PutMapping(consumes = "application/json", produces = "application/json")
     public ResponseEntity<PaymentResponseDTO> setPayment(@Valid @RequestBody PaymentRequestDTO request) {
         PaymentResponseDTO response = paymentFacade.processPayment(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);

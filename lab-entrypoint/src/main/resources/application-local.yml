@@ -1,0 +1,12 @@
+# No IntelliJ, adicione a configuração abaixo, para subir local e se comunicar com o docker.
+# VM Options: -Dspring.profiles.active=local
+spring:
+  cloud:
+    aws:
+      sqs:
+        endpoint: http://localhost:4566
+      sns:
+        endpoint: http://localhost:4566
+  data:
+    mongodb:
+      uri: mongodb://root:qwe123@localhost:27017/spring-studious-lab-aws-database?authSource=admin

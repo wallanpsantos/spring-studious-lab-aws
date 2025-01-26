@@ -1,0 +1,11 @@
+spring:
+  cloud:
+    aws:
+      sqs:
+        endpoint: http://localstack:4566
+      sns:
+        endpoint: http://localstack:4566
+  data:
+    mongodb:
+      # Cloud DEV
+      uri: mongodb://root:qwe123@mongo-dev:27017/spring-studious-lab-aws-database?authSource=admin

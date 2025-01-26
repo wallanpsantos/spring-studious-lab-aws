@@ -1,8 +1,8 @@
-package br.com.springstudiouslabaws.labcore.services;
+package br.com.springstudiouslabaws.labcore.services.sqs;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 
-public interface SqsReceiverService {
+public interface PaymentSQSReceiverService {
     // Lógica para receber mensagens das filas do SQS
 
     void receiveFromPartialQueue(PaymentDomain paymentDomain);

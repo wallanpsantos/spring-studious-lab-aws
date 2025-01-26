@@ -125,6 +125,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
         <!-- Dependências Cloud AWS -->
         <dependency> <!-- Starter base para integração com AWS -->
@@ -142,6 +146,10 @@
         <dependency> <!-- S3: Armazenamento de objetos para arquivos e assets -->
             <groupId>io.awspring.cloud</groupId>
             <artifactId>spring-cloud-aws-starter-s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-core</artifactId>
         </dependency>
 
         <!-- Dependências de teste comuns -->
@@ -204,7 +212,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
             <!-- Dependências do MapStruct -->
             <dependency>
                 <groupId>org.mapstruct</groupId>

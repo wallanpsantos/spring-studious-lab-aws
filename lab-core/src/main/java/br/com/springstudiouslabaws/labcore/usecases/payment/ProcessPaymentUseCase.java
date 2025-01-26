@@ -1,11 +1,10 @@
-package br.com.springstudiouslabaws.labcore.usecases;
-
+package br.com.springstudiouslabaws.labcore.usecases.payment;
 
 import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 import br.com.springstudiouslabaws.labcore.enums.PaymentItemStatusEnum;
 import br.com.springstudiouslabaws.labcore.exceptions.PaymentNotFoundException;
 import br.com.springstudiouslabaws.labcore.repositories.PaymentRepository;
-import br.com.springstudiouslabaws.labcore.services.SqsSendService;
+import br.com.springstudiouslabaws.labcore.services.sqs.PaymentSQSSendService;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -16,9 +15,9 @@ import static br.com.springstudiouslabaws.labcore.enums.PaymentItemStatusEnum.fr
 public class ProcessPaymentUseCase {
 
     private final PaymentRepository repository;
-    private final SqsSendService sqsService;
+    private final PaymentSQSSendService sqsService;
 
-    public ProcessPaymentUseCase(PaymentRepository repository, SqsSendService sqsService) {
+    public ProcessPaymentUseCase(PaymentRepository repository, PaymentSQSSendService sqsService) {
         this.repository = repository;
         this.sqsService = sqsService;
     }
