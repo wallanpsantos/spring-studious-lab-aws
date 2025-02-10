@@ -1,6 +1,6 @@
 sequenceDiagram
     autonumber
-    
+
     participant C as Cliente
     participant LC as LoanController
     participant LF as LoanFacade
@@ -17,26 +17,26 @@ sequenceDiagram
     LC->>+LF: createLoan(request)
     LF->>+ETM: toDomain(requestDTO)
     ETM-->>-LF: loanDomain
-    
+
     LF->>+LU: processLoan(loanDomain)
-    
+
     LU->>+LD: validate()
-    LD-->>-LU: 
-    
+    LD-->>-LU: Domain verification done
+
     LU->>LD: setLastUpdate(now)
     LU->>LD: setLoanId(UUID)
     LU->>LD: setStatus(PENDING)
-    
+
     LU->>+LR: save(loanDomain)
     LR->>+M: save(loanEntity)
     M-->>-LR: savedEntity
     LR-->>-LU: savedDomain
-    
+
     LU-->>-LF: processedLoan
-    
+
     LF->>+DTM: toDTO(processedLoan)
     DTM-->>-LF: responseDTO
-    
+
     LF-->>-LC: LoanResponseDTO
     LC-->>-C: HTTP 201 Created
     Note over LC,C: Response Body: LoanResponseDTO
