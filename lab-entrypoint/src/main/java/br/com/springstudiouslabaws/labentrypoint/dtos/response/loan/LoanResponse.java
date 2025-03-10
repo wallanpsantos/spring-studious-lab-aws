@@ -1,11 +1,11 @@
-package br.com.springstudiouslabaws.labentrypoint.dtos.response;
+package br.com.springstudiouslabaws.labentrypoint.dtos.response.loan;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-public record LoanResponseDTO(
+public record LoanResponse(
 
         @JsonProperty("descricao_emprestimo")
         String description,

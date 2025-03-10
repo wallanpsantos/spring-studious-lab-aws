@@ -1,37 +1,30 @@
 package br.com.springstudiouslabaws.labcore.domain.payment;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 public class PaymentItemDomain {
 
+    private String loanId;
     private String paymentId;
     private BigDecimal paymentValue;
     private String paymentStatus;
     private BigDecimal originalAmount;
+    private String comment;
 
-    public String getPaymentId() {
-        return paymentId;
+    public String getComment() {
+        return comment;
     }
 
-    public void setPaymentId(String paymentId) {
-        this.paymentId = paymentId;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
-    public BigDecimal getPaymentValue() {
-        return paymentValue;
+    public String getLoanId() {
+        return loanId;
     }
 
-    public void setPaymentValue(BigDecimal paymentValue) {
-        this.paymentValue = paymentValue;
-    }
-
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
+    public void setLoanId(String loanId) {
+        this.loanId = loanId;
     }
 
     public BigDecimal getOriginalAmount() {
@@ -42,26 +35,27 @@ public class PaymentItemDomain {
         this.originalAmount = originalAmount;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PaymentItemDomain that = (PaymentItemDomain) o;
-        return Objects.equals(paymentId, that.paymentId) && Objects.equals(paymentValue, that.paymentValue) && Objects.equals(paymentStatus, that.paymentStatus);
+    public String getPaymentId() {
+        return paymentId;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(paymentId, paymentValue, paymentStatus);
+    public void setPaymentId(String paymentId) {
+        this.paymentId = paymentId;
     }
 
-    @Override
-    public String toString() {
-        return "{" +
-                "paymentId='" + paymentId + '\'' +
-                ", paymentValue=" + paymentValue +
-                ", paymentStatus='" + paymentStatus + '\'' +
-                ", originalAmount=" + originalAmount +
-                '}';
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public BigDecimal getPaymentValue() {
+        return paymentValue;
+    }
+
+    public void setPaymentValue(BigDecimal paymentValue) {
+        this.paymentValue = paymentValue;
     }
 }

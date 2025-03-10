@@ -1,0 +1,31 @@
+package br.com.springstudiouslabaws.labcore.usecases.payment;
+
+import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
+import br.com.springstudiouslabaws.labcore.repositories.LoanRepository;
+import br.com.springstudiouslabaws.labcore.repositories.PaymentRepository;
+import br.com.springstudiouslabaws.labcore.services.sqs.PaymentSQSSendService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CreatePaymentUseCase {
+
+    private final PaymentRepository paymentRepository;
+    private final LoanRepository loanRepository;
+    private final PaymentSQSSendService sqsService;
+
+    public CreatePaymentUseCase(LoanRepository loanRepository, PaymentRepository paymentRepository, PaymentSQSSendService sqsService) {
+        this.loanRepository = loanRepository;
+        this.paymentRepository = paymentRepository;
+        this.sqsService = sqsService;
+    }
+
+    public PaymentDomain process(PaymentDomain paymentDomain) {
+
+        boolean verifyClientId = loanRepository.existsClientId(paymentDomain.getClientId());
+
+
+        return paymentRepository.save(paymentDomain);
+    }
+
+}
+
