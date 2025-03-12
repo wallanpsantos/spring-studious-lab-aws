@@ -3,7 +3,6 @@ package br.com.springstudiouslabaws.labentrypoint.controllers;
 import br.com.springstudiouslabaws.labentrypoint.dtos.request.payment.PaymentRequest;
 import br.com.springstudiouslabaws.labentrypoint.dtos.response.payment.PaymentResponse;
 import br.com.springstudiouslabaws.labentrypoint.facade.PaymentFacade;
-import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class PaymentController {
     }
 
     @PostMapping
-    public ResponseEntity<PaymentResponse> createPayment(@Valid @RequestBody PaymentRequest request) {
+    public ResponseEntity<PaymentResponse> createPayment(@RequestBody PaymentRequest request) {
         PaymentResponse response = paymentFacade.createPayment(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }

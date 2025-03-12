@@ -42,4 +42,11 @@ public class LoanRepositoryImpl implements LoanRepository {
         return mongoRepository.existsByClientClientId(clientId);
     }
 
+    @Override
+    public LoanDomain findLoanByLoanId(String loanId) {
+        log.debug("Buscar dados de empréstimo com ID: {}", loanId);
+        LoanEntity entity = mongoRepository.findLoanEntityByLoanId(loanId);
+        return mapper.toDomain(entity);
+    }
+
 }

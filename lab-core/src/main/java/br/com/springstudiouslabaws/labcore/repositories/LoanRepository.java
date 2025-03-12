@@ -9,4 +9,6 @@ public interface LoanRepository {
     boolean existsLoanId(String loanId);
 
     boolean existsClientId(String clientId);
+
+    LoanDomain findLoanByLoanId(String loanId);
 }

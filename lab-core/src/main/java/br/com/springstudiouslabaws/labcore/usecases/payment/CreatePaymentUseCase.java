@@ -4,10 +4,14 @@ import br.com.springstudiouslabaws.labcore.domain.payment.PaymentDomain;
 import br.com.springstudiouslabaws.labcore.repositories.LoanRepository;
 import br.com.springstudiouslabaws.labcore.repositories.PaymentRepository;
 import br.com.springstudiouslabaws.labcore.services.sqs.PaymentSQSSendService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CreatePaymentUseCase {
+
+    private final Logger log = LoggerFactory.getLogger(CreatePaymentUseCase.class);
 
     private final PaymentRepository paymentRepository;
     private final LoanRepository loanRepository;
@@ -20,8 +24,7 @@ public class CreatePaymentUseCase {
     }
 
     public PaymentDomain process(PaymentDomain paymentDomain) {
-
-        boolean verifyClientId = loanRepository.existsClientId(paymentDomain.getClientId());
+        log.info("Processando pagamento para cliente: {}", paymentDomain.getClientId());
 
 
         return paymentRepository.save(paymentDomain);

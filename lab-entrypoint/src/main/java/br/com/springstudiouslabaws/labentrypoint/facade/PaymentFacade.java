@@ -19,7 +19,9 @@ public class PaymentFacade {
     private final EntryToCoreMapper entryToCoreMapper;
     private final DomainToDTOMapper domainToDTOMapper;
 
-    public PaymentFacade(CreatePaymentUseCase createPaymentUseCase, EntryToCoreMapper entryToCoreMapper, DomainToDTOMapper domainToDTOMapper) {
+    public PaymentFacade(CreatePaymentUseCase createPaymentUseCase,
+                         EntryToCoreMapper entryToCoreMapper,
+                         DomainToDTOMapper domainToDTOMapper) {
         this.createPaymentUseCase = createPaymentUseCase;
         this.entryToCoreMapper = entryToCoreMapper;
         this.domainToDTOMapper = domainToDTOMapper;
@@ -27,11 +29,15 @@ public class PaymentFacade {
 
     public PaymentResponse createPayment(PaymentRequest request) {
         log.info("Criando novo pagamento para o cliente: {}", request.clientId());
+
         PaymentDomain domain = entryToCoreMapper.toDomain(request);
 
-        var  response = createPaymentUseCase.process(domain);
+        PaymentDomain processedPayment = createPaymentUseCase.process(domain);
 
-        log.info("Novo pagamento criado com sucesso para o cliente: {}", request.clientId());
-        return null;
+        PaymentResponse response = domainToDTOMapper.toDTO(processedPayment);
+
+        log.info("Novo pagamento criado com sucesso para o cliente: {}", response.clientId());
+        return response;
     }
+
 }

@@ -25,4 +25,6 @@ public interface MongoLoanRespository extends MongoRepository<LoanEntity, String
      * @return true se existir um empréstimo com o ID fornecido, false caso contrário
      */
     boolean existsByLoanId(String loanId);
+
+    LoanEntity findLoanEntityByLoanId(String loanId);
 }
