@@ -15,7 +15,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.1</version>
+        <version>3.4.5</version>
         <relativePath/>
     </parent>
 
@@ -74,32 +74,31 @@
 
         <!-- Versões de dependências -->
         <commons-lang3.version>3.17.0</commons-lang3.version>
-        <jackson.version>2.18.2</jackson.version>
+        <jackson.version>2.19.0</jackson.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <springdoc.version>2.7.0</springdoc.version>
-        <swagger-annotations.version>2.2.26</swagger-annotations.version>
-        <slf4j-api.version>2.0.16</slf4j-api.version>
+        <springdoc.version>2.8.6</springdoc.version>
+        <swagger-annotations.version>2.2.30</swagger-annotations.version>
+        <slf4j-api.version>2.0.17</slf4j-api.version>
         <log4j-core.version>2.24.2</log4j-core.version>
         <hamcrest.version>3.0</hamcrest.version>
-        <jackson-databind.version>2.18.2</jackson-databind.version>
+        <jackson-databind.version>2.19.0</jackson-databind.version>
         <easymock.version>5.5.0</easymock.version>
-        <wiremock.version>3.10.0</wiremock.version>
-        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <wiremock.version>3.13.0</wiremock.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
         <spring-cloud-aws-dependencies.version>3.2.1</spring-cloud-aws-dependencies.version>
 
         <!-- Versões de dependências para correção de conflitos e transitivas -->
         <asm.version>9.6</asm.version>
         <objenesis.version>3.4</objenesis.version>
-        <log4j-core.version>2.24.2</log4j-core.version>
-        <commons-io.version>2.18.0</commons-io.version>
+        <commons-io.version>2.19.0</commons-io.version>
 
         <!-- Versões de Plugins -->
-        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
-        <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
-        <maven-surefire-report-plugin.version>3.5.2</maven-surefire-report-plugin.version>
-        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
-        <maven-project-info-reports-plugin.version>3.8.0</maven-project-info-reports-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>3.5.3</maven-surefire-report-plugin.version>
+        <jacoco-maven-plugin.version>0.8.13</jacoco-maven-plugin.version>
+        <maven-project-info-reports-plugin.version>3.9.0</maven-project-info-reports-plugin.version>
         <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
 
         <!-- Configurações de Plugins -->
