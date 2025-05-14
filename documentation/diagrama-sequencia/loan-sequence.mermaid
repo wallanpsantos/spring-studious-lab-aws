@@ -1,0 +1,42 @@
+sequenceDiagram
+    autonumber
+
+    participant C as Cliente
+    participant LC as LoanController
+    participant LF as LoanFacade
+    participant ETM as EntryToCoreMapper
+    participant LU as LoanUseCase
+    participant LD as LoanDomain
+    participant LR as LoanRepository
+    participant DTM as DomainToDTOMapper
+    participant M as MongoDB
+
+    C->>+LC: POST /v1/emprestimos
+    Note over C,LC: LoanRequestDTO
+
+    LC->>+LF: createLoan(request)
+    LF->>+ETM: toDomain(requestDTO)
+    ETM-->>-LF: loanDomain
+
+    LF->>+LU: processLoan(loanDomain)
+
+    LU->>+LD: validate()
+    LD-->>-LU: Domain verification done
+
+    LU->>LD: setLastUpdate(now)
+    LU->>LD: setLoanId(UUID)
+    LU->>LD: setStatus(PENDING)
+
+    LU->>+LR: save(loanDomain)
+    LR->>+M: save(loanEntity)
+    M-->>-LR: savedEntity
+    LR-->>-LU: savedDomain
+
+    LU-->>-LF: processedLoan
+
+    LF->>+DTM: toDTO(processedLoan)
+    DTM-->>-LF: responseDTO
+
+    LF-->>-LC: LoanResponseDTO
+    LC-->>-C: HTTP 201 Created
+    Note over LC,C: Response Body: LoanResponseDTO

@@ -1,7 +1,7 @@
 package br.com.springstudiouslabaws.labentrypoint.controllers;
 
-import br.com.springstudiouslabaws.labentrypoint.dtos.request.LoanRequestDTO;
-import br.com.springstudiouslabaws.labentrypoint.dtos.response.LoanResponseDTO;
+import br.com.springstudiouslabaws.labentrypoint.dtos.request.loan.LoanRequest;
+import br.com.springstudiouslabaws.labentrypoint.dtos.response.loan.LoanResponse;
 import br.com.springstudiouslabaws.labentrypoint.facade.LoanFacade;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -21,9 +21,9 @@ public class LoanController {
         this.loanFacade = loanFacade;
     }
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<LoanResponseDTO> createLoan(@Valid @RequestBody LoanRequestDTO request) {
-        LoanResponseDTO response = loanFacade.createLoan(request);
+    @PostMapping
+    public ResponseEntity<LoanResponse> createLoan(@Valid @RequestBody LoanRequest request) {
+        LoanResponse response = loanFacade.createLoan(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
