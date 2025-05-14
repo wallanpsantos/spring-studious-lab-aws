@@ -40,12 +40,15 @@ public class SQSConfiguration {
 
     @Bean
     public SqsAsyncClient sqsAsyncClient() {
+
         return SqsAsyncClient.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(
                         AwsBasicCredentials.create(accessKey, secretKey)))
                 .endpointOverride(URI.create(urlSQS))
                 .region(Region.of(region))
                 .build();
+
+
     }
 
     @Bean
