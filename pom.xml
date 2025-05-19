@@ -59,6 +59,7 @@
         <module>lab-core</module>
         <module>lab-dataprovider</module>
         <module>lab-entrypoint</module>
+        <module>lab-config</module>
     </modules>
 
     <!-- Propriedades de versões centralizadas -->
