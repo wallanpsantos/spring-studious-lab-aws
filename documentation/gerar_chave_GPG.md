@@ -129,7 +129,31 @@ detalhados para garantir que seus commits estejam assinados e autenticados corre
 
 ## Problema com SSH ou envio de alteração (PUSH)
 
-1. **Caso esteja pedindo User e Password, impedindo de realizar o PUSH**:
+1. **Erro no Push: "GH007: Your push would publish a private email address"**
+
+   Este erro ocorre quando você tenta enviar um commit que foi criado com um endereço de e-mail que está marcado como privado em sua conta do GitHub. É uma medida de segurança do GitHub para evitar a exposição acidental do seu e-mail real.
+
+Verifique se seu user.email local está correto.
+Certifique-se de que seu Git está configurado para usar o e-mail noreply, conforme ensinado no início deste guia.
+
+   ```bash
+   git config user.email # Deve retornar o e-mail noreply
+   ```
+
+Se não estiver, configure-o:
+
+   ```bash
+   git config --global user.email "1233556+username@users.noreply.github.com"
+   ```
+
+Corrija o autor dos últimos e depois faça o push novamente
+
+   ```bash
+   git commit --amend --no-edit --reset-author
+   ```
+
+
+3. **Caso esteja pedindo User e Password, impedindo de realizar o PUSH**:
 
    Isso ocorre porque agora estamos usando o e-mail gerado pelo GitHub para operações de Git, para isso precisa
    atualizar o SSH.
@@ -182,6 +206,8 @@ detalhados para garantir que seus commits estejam assinados e autenticados corre
    remote: Resolving deltas: 100% (1/1), completed with 1 local object.
    To github.com:usernameexemplo/repository.git
    ```
+
+   
 
 ---
 
