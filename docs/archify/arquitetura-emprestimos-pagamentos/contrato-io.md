@@ -3,7 +3,7 @@
 Atributos, obrigatoriedade, exceções e regras das três operações publicadas: `POST /v1/emprestimos`,
 `GET /v1/emprestimos/{loanId}` e `POST /v1/pagamentos`. Os nomes são os do JSON (`@JsonProperty` quando existe; senão, o
 nome do componente do record). Obrigatório aqui significa anotação `NotNull`, `NotBlank` ou `NotEmpty`. A tabela também
-está nos cartões de `docs/arquitetura-emprestimos-pagamentos.html`.
+está nos cartões de `docs/archify/arquitetura-emprestimos-pagamentos/arquitetura-emprestimos-pagamentos.html`.
 
 O cabeçalho `Idempotency-Key` é opcional nos dois POST. O GET não usa idempotência.
 
