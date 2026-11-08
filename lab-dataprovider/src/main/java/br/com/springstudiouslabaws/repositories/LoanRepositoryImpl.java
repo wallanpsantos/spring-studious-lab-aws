@@ -2,12 +2,20 @@ package br.com.springstudiouslabaws.repositories;
 
 import br.com.springstudiouslabaws.config.mongodb.MongoLoanRespository;
 import br.com.springstudiouslabaws.domain.loan.LoanDomain;
+import br.com.springstudiouslabaws.domain.loan.LoanSettlement;
+import br.com.springstudiouslabaws.domain.loan.OutstandingBalance;
 import br.com.springstudiouslabaws.entities.LoanEntity;
+import br.com.springstudiouslabaws.exceptions.LoanNotFoundException;
+import br.com.springstudiouslabaws.exceptions.LoanUpdateConflictException;
 import br.com.springstudiouslabaws.mappers.LoanCoreToDataMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Repository;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Repository
 public class LoanRepositoryImpl implements LoanRepository {
@@ -27,6 +35,33 @@ public class LoanRepositoryImpl implements LoanRepository {
         log.debug("Salvando empréstimo com ID: {}", loan.getLoanId());
         LoanEntity entity = mongoRepository.save(mapper.toEntity(loan));
         return mapper.toDomain(entity);
+    }
+
+    @Override
+    public void applyDebit(String loanId, BigDecimal amount) {
+        LoanEntity current = mongoRepository.findLoanEntityByLoanId(loanId);
+        if (current == null) {
+            throw new LoanNotFoundException("Empréstimo não encontrado");
+        }
+        LoanSettlement settlement = OutstandingBalance.afterDebit(
+                current.outstandingBalance(), current.amountRequested(), amount);
+        LoanEntity updated = new LoanEntity(
+                current.id(),
+                current.loanId(),
+                current.description(),
+                current.amountRequested(),
+                settlement.outstandingBalance(),
+                settlement.status(),
+                current.dateFinalPayment(),
+                current.payments(),
+                current.client(),
+                LocalDateTime.now(),
+                current.version());
+        try {
+            mongoRepository.save(updated);
+        } catch (OptimisticLockingFailureException exception) {
+            throw new LoanUpdateConflictException("Empréstimo foi atualizado por outra operação", exception);
+        }
     }
 
     @Override

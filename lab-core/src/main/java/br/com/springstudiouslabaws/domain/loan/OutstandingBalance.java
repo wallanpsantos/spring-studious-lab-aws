@@ -1,5 +1,6 @@
 package br.com.springstudiouslabaws.domain.loan;
 
+import br.com.springstudiouslabaws.enums.LoanStatusEnum;
 import br.com.springstudiouslabaws.exceptions.BusinessException;
 
 import java.math.BigDecimal;
@@ -9,7 +10,7 @@ public final class OutstandingBalance {
     private OutstandingBalance() {
     }
 
-    public static BigDecimal afterDebit(BigDecimal outstanding, BigDecimal amountRequested, BigDecimal debit) {
+    public static LoanSettlement afterDebit(BigDecimal outstanding, BigDecimal amountRequested, BigDecimal debit) {
         if (debit == null || debit.signum() <= 0) {
             throw new BusinessException("Valor da baixa deve ser maior que zero");
         }
@@ -20,6 +21,10 @@ public final class OutstandingBalance {
         if (debit.compareTo(current) > 0) {
             throw new BusinessException("Baixa maior que o saldo do empréstimo");
         }
-        return current.subtract(debit);
+        BigDecimal next = current.subtract(debit);
+        String status = next.signum() == 0
+                ? LoanStatusEnum.PAID.getValue()
+                : LoanStatusEnum.PENDING.getValue();
+        return new LoanSettlement(next, status);
     }
 }

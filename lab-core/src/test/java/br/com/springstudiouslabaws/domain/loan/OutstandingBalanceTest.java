@@ -1,5 +1,6 @@
 package br.com.springstudiouslabaws.domain.loan;
 
+import br.com.springstudiouslabaws.enums.LoanStatusEnum;
 import br.com.springstudiouslabaws.exceptions.BusinessException;
 import org.junit.jupiter.api.Test;
 
@@ -11,27 +12,30 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class OutstandingBalanceTest {
 
     @Test
-    void baixaParcialReduzOSaldo() {
-        BigDecimal saldo = OutstandingBalance.afterDebit(
+    void baixaParcialReduzOSaldoEMantemPendente() {
+        LoanSettlement settlement = OutstandingBalance.afterDebit(
                 new BigDecimal("1000.00"), new BigDecimal("1000.00"), new BigDecimal("150.50"));
 
-        assertEquals(new BigDecimal("849.50"), saldo);
+        assertEquals(new BigDecimal("849.50"), settlement.outstandingBalance());
+        assertEquals(LoanStatusEnum.PENDING.getValue(), settlement.status());
     }
 
     @Test
-    void saldoAusenteParteDoValorSolicitado() {
-        BigDecimal saldo = OutstandingBalance.afterDebit(
+    void saldoAusenteParteDoValorSolicitadoEMantemPendente() {
+        LoanSettlement settlement = OutstandingBalance.afterDebit(
                 null, new BigDecimal("500.00"), new BigDecimal("100.00"));
 
-        assertEquals(new BigDecimal("400.00"), saldo);
+        assertEquals(new BigDecimal("400.00"), settlement.outstandingBalance());
+        assertEquals(LoanStatusEnum.PENDING.getValue(), settlement.status());
     }
 
     @Test
-    void baixaIgualAoSaldoZera() {
-        BigDecimal saldo = OutstandingBalance.afterDebit(
+    void baixaIgualAoSaldoQuitaOEmprestimo() {
+        LoanSettlement settlement = OutstandingBalance.afterDebit(
                 new BigDecimal("80.00"), new BigDecimal("80.00"), new BigDecimal("80.00"));
 
-        assertEquals(0, saldo.compareTo(BigDecimal.ZERO));
+        assertEquals(0, settlement.outstandingBalance().compareTo(BigDecimal.ZERO));
+        assertEquals(LoanStatusEnum.PAID.getValue(), settlement.status());
     }
 
     @Test

@@ -1,6 +1,7 @@
 package br.com.springstudiouslabaws.entities;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
@@ -37,6 +38,7 @@ public record LoanEntity(
         LocalDate dateFinalPayment,
         PaymentsEntity payments,
         ClientEntity client,
-        LocalDateTime lastUpdate
+        LocalDateTime lastUpdate,
+        @Version Long version
 ) {
 }
