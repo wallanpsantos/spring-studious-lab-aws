@@ -28,12 +28,16 @@ import static org.junit.jupiter.api.Assertions.fail;
 class DocsIoContractTest {
 
     private static final Pattern ERROR_CODE = Pattern.compile("ApiErrorResponse\\.of\\(\"([A-Z0-9_]+)\"");
+    private static final Path CONTRACT = Path.of(
+            "docs/archify/arquitetura-emprestimos-pagamentos/contrato-io.md");
+    private static final Path DIAGRAM = Path.of(
+            "docs/archify/arquitetura-emprestimos-pagamentos/arquitetura-emprestimos-pagamentos.html");
 
     @Test
     void documentacaoCobreAtributosObrigatoriedadeExcecoesEStatusPadrao() throws IOException {
         Path root = repoRoot();
-        String contrato = Files.readString(root.resolve("docs/contrato-io.md"));
-        String html = Files.readString(root.resolve("docs/arquitetura-emprestimos-pagamentos.html"));
+        String contrato = Files.readString(root.resolve(CONTRACT));
+        String html = Files.readString(root.resolve(DIAGRAM));
         assertFalse(html.isBlank());
 
         for (Class<?> record : records()) {
@@ -85,12 +89,12 @@ class DocsIoContractTest {
     private static Path repoRoot() {
         Path dir = Path.of("").toAbsolutePath();
         while (dir != null) {
-            if (Files.exists(dir.resolve("docs/contrato-io.md")) && Files.exists(dir.resolve("pom.xml"))) {
+            if (Files.isRegularFile(dir.resolve(CONTRACT)) && Files.isRegularFile(dir.resolve("pom.xml"))) {
                 return dir;
             }
             dir = dir.getParent();
         }
-        fail("docs/contrato-io.md não encontrado a partir de " + Path.of("").toAbsolutePath());
+        fail(CONTRACT + " não encontrado a partir de " + Path.of("").toAbsolutePath());
         return Path.of("");
     }
 
