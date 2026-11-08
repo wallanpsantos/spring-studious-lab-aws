@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>br.com.spring-studious-lab-aws</groupId>
+    <artifactId>spring-studious-lab-aws</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>spring-studious-lab-aws</name>
+    <description>spring-studious-lab-aws</description>
+
+    <!-- Declaração do parent do Spring Boot -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.2</version>
+        <relativePath/>
+    </parent>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <id>wallanpsantos</id>
+            <name>Wallan Pereira</name>
+            <url>https://github.com/wallanpsantos</url>
+        </developer>
+    </developers>
+
+    <!-- Repositório Git ou controle de versão utilizado -->
+    <scm>
+        <connection>scm:git:git://github.com/wallanpsantos/spring-studious-lab-aws.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/wallanpsantos/spring-studious-lab-aws.git
+        </developerConnection>
+        <url>https://github.com/wallanpsantos/spring-studious-lab-aws</url>
+    </scm>
+
+    <!-- Configuração para deploy automatizado no GitHub Packages ou outros repositórios Maven. -->
+    <distributionManagement>
+        <repository>
+            <id>github-releases</id>
+            <url>https://maven.pkg.github.com/wallanpsantos/spring-studious-lab-aws</url>
+        </repository>
+        <snapshotRepository>
+            <id>github-snapshots</id>
+            <url>https://maven.pkg.github.com/wallanpsantos/spring-studious-lab-aws</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <!-- Módulos do projeto -->
+    <modules>
+        <module>lab-core</module>
+        <module>lab-dataprovider</module>
+        <module>lab-entrypoint</module>
+        <module>lab-config</module>
+    </modules>
+
+    <!-- Propriedades de versões centralizadas -->
+    <properties>
+        <!-- Versão do Java -->
+        <java.version>25</java.version>
+
+        <!-- Propriedades Encoding UTF-8 -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <file.encoding>UTF-8</file.encoding>
+        <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+
+        <!-- Versões de dependências fora do BOM do Spring Boot -->
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <springdoc.version>3.2.0</springdoc.version>
+        <spring-cloud.version>2025.1.4</spring-cloud.version>
+        <spring-cloud-aws-dependencies.version>4.2.1</spring-cloud-aws-dependencies.version>
+
+        <!-- Versões de Plugins -->
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
+        <maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
+        <maven-surefire-report-plugin.version>3.5.3</maven-surefire-report-plugin.version>
+        <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
+        <maven-project-info-reports-plugin.version>3.9.0</maven-project-info-reports-plugin.version>
+        <maven-enforcer-plugin.version>3.5.0</maven-enforcer-plugin.version>
+
+        <!-- Configurações de Plugins -->
+        <jacoco.minimum.coverage>0.80</jacoco.minimum.coverage>
+    </properties>
+
+    <dependencies>
+        <!-- Dependências do Ecossistema Spring -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-circuitbreaker-resilience4j</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- Dependências Cloud AWS -->
+        <dependency> <!-- Starter base para integração com AWS -->
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter</artifactId>
+        </dependency>
+        <dependency> <!-- SNS: Serviço de mensageria pub/sub para notificações assíncronas -->
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-sns</artifactId>
+        </dependency>
+        <dependency> <!-- SQS: Serviço de filas para processamento assíncrono de mensagens -->
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-sqs</artifactId>
+        </dependency>
+        <dependency> <!-- S3: Armazenamento de objetos para arquivos e assets -->
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-starter-s3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.awspring.cloud</groupId>
+            <artifactId>spring-cloud-aws-core</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Dependências do Ecossistema Spring -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- Dependências Cloud AWS -->
+            <dependency>
+                <groupId>io.awspring.cloud</groupId>
+                <artifactId>spring-cloud-aws-dependencies</artifactId>
+                <version>${spring-cloud-aws-dependencies.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- Dependências do MapStruct -->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+                <scope>provided</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- Plugin do Spring Boot para empacotamento e execução -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Plugin Maven Compiler para processar anotações -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <release>${java.version}</release>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${maven-resources-plugin.version}</version>
+                <configuration>
+                    <encoding>${maven.compiler.encoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin Maven Surefire para execução dos testes -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <testFailureIgnore>false</testFailureIgnore>
+                    <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para gerar relatorios de cobertura de teste/classes -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <!-- Injeta o agente JaCoCo antes dos testes -->
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <!-- Gera relatórios após os testes do Surefire -->
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <destFile>${project.build.directory}/jacoco.exec</destFile>
+                    <outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+                    <rules>
+                        <rule>
+                            <element>PACKAGE</element>
+                            <limits>
+                                <limit>
+                                    <counter>LINE</counter>
+                                    <value>COVEREDRATIO</value>
+                                    <!-- Definir cobertura mínima para classes e testes. -->
+                                    <minimum>${jacoco.minimum.coverage}</minimum>
+                                </limit>
+                            </limits>
+                        </rule>
+                    </rules>
+                </configuration>
+            </plugin>
+
+            <!-- Plugin para verificar dependências -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>enforce-versions</id>
+                        <goals>
+                            <!-- Define que o goal 'enforce' será executado automaticamente -->
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireMavenVersion>
+                                    <!-- Maven 3.8.0 ou superior é requerido -->
+                                    <version>[3.8.0,)</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <!-- Java 25 ou superior é requerido -->
+                                    <version>[25,)</version>
+                                </requireJavaVersion>
+                                <!-- Garante que não existam versões conflitantes de dependência no projeto -->
+                                <dependencyConvergence/>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <!-- Suporte para Geração de Relatórios do Projeto: como dependências, cobertura de código e documentação -->
+    <reporting>
+        <!-- Diretorio comum para os relatórios -->
+        <outputDirectory>${project.build.directory}/site</outputDirectory>
+        <plugins>
+            <!-- Relatório de informações do projeto -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${maven-project-info-reports-plugin.version}</version>
+            </plugin>
+
+            <!-- Relatório de cobertura de código -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+            </plugin>
+
+            <!-- Relatório de execução de testes gerados automaticamente -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-report-plugin</artifactId>
+                <version>${maven-surefire-report-plugin.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+</project>

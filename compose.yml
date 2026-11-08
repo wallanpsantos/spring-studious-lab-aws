@@ -1,0 +1,94 @@
+networks:
+  developer-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  localstack_data:
+
+services:
+  # LocalStack 4.14 é a última linha community que sobe sem conta.
+  # Imagens a partir de 2026.3 (tag latest) exigem LOCALSTACK_AUTH_TOKEN.
+  # https://docs.localstack.cloud/aws/getting-started/installation/
+  localstack:
+    container_name: localstack-main
+    image: localstack/localstack:4.14.0
+    ports:
+      - "127.0.0.1:4566:4566"
+    environment:
+      SERVICES: sns,sqs,s3
+      DEBUG: "${DEBUG:-0}"
+      AWS_DEFAULT_REGION: "${AWS_REGION:-us-east-1}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:-test}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:-test}"
+      SQS_QUEUE_PARTIAL: "${SQS_QUEUE_PARTIAL:-payment-partial-queue}"
+      SQS_QUEUE_TOTAL: "${SQS_QUEUE_TOTAL:-payment-total-queue}"
+      SQS_QUEUE_OVERMEASURE: "${SQS_QUEUE_OVERMEASURE:-payment-overmeasure-queue}"
+      SNS_TOPIC_NAME: "${SNS_TOPIC_NAME:-payments-topic}"
+      S3_BUCKET_NAME: "${S3_BUCKET_NAME:-bucket-studios-lab-aws}"
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - ./localstack/init-s3-bucket.sh:/etc/localstack/init/ready.d/init-s3-bucket.sh
+      - ./localstack/init-sns-topic.sh:/etc/localstack/init/ready.d/init-sns-topic.sh
+      - ./localstack/init-sqs-queue.sh:/etc/localstack/init/ready.d/init-sqs-queue.sh
+      - ./localstack/subscribe-sqs-to-sns.sh:/etc/localstack/init/ready.d/subscribe-sqs-to-sns.sh
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:4566/_localstack/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - developer-network
+
+  # MongoDB 8.0. O shell `mongo` saiu na linha 6; o healthcheck usa mongosh.
+  # https://hub.docker.com/_/mongo
+  mongo-dev:
+    image: mongo:8.0
+    container_name: mongo-dev
+    hostname: mongo-dev
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${MY_MONGO_INITDB_ROOT_USERNAME:-root}"
+      MONGO_INITDB_ROOT_PASSWORD: "${MY_MONGO_INITDB_ROOT_PASSWORD:-qwe123}"
+    ports:
+      - "${MY_MONGO_PORT:-27017}:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mongosh --quiet --username \"$$MONGO_INITDB_ROOT_USERNAME\" --password \"$$MONGO_INITDB_ROOT_PASSWORD\" --authenticationDatabase admin --eval \"db.adminCommand('ping').ok\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    networks:
+      - developer-network
+
+  spring-studious-lab-aws-service:
+    container_name: lab-service
+    hostname: spring-studious-lab-aws-service
+    image: spring-studious-lab-aws-service:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MONGODB_URI: mongodb://${MY_MONGO_INITDB_ROOT_USERNAME:-root}:${MY_MONGO_INITDB_ROOT_PASSWORD:-qwe123}@mongo-dev:27017/spring-studious-lab-aws-database?authSource=admin
+      AWS_ENDPOINT: http://localstack:4566
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID:-test}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY:-test}"
+      AWS_REGION: "${AWS_REGION:-us-east-1}"
+      SQS_QUEUE_PARTIAL: "${SQS_QUEUE_PARTIAL:-payment-partial-queue}"
+      SQS_QUEUE_TOTAL: "${SQS_QUEUE_TOTAL:-payment-total-queue}"
+      SQS_QUEUE_OVERMEASURE: "${SQS_QUEUE_OVERMEASURE:-payment-overmeasure-queue}"
+    ports:
+      - "8082:8082"
+    depends_on:
+      mongo-dev:
+        condition: service_healthy
+      localstack:
+        condition: service_healthy
+    networks:
+      - developer-network

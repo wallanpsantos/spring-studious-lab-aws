@@ -1,0 +1,129 @@
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.directory
+.Trash-*
+.nfs*
+[Dd]esktop.ini
+$RECYCLE.BIN/
+*.lnk
+.fuse_hidden*
+Icon
+
+# Segredos locais. O modelo versionado é .env.example.
+.env
+
+# Arquivos de log e temporários
+*.log
+*.tmp
+*.bak
+logs/
+tmp/
+temp/
+
+# Trabalho local do Archify. O HTML de visualização fica em docs/archify/.
+.archify/
+
+# Java específico
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+replay_pid*
+.mtj.tmp/
+
+# Maven
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+
+# IDE - IntelliJ
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/dictionaries
+.idea/**/shelf
+.idea/**/aws.xml
+.idea/**/contentModel.xml
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+.idea/**/gradle.xml
+.idea/**/libraries
+.idea/**/mongoSettings.xml
+.idea/sonarlint/
+
+# Importante: permitimos alguns arquivos de configuração do IntelliJ para reconhecimento do projeto
+!.idea/compiler.xml
+!.idea/jarRepositories.xml
+!.idea/modules.xml
+!.idea/misc.xml
+!.idea/encodings.xml
+!.idea/vcs.xml
+
+/.idea/compiler.xml
+/.idea/encodings.xml
+/.idea/jarRepositories.xml
+/.idea/mavenHomeManager.xml
+/.idea/misc.xml
+/.idea/remote-targets.xml
+/.idea/vcs.xml
+
+
+*.iws
+*.ipr
+out/
+.idea_modules/
+
+# Permitir arquivos de módulo
+!*.iml
+
+# IDE - Eclipse
+.metadata/
+bin/
+.settings/
+.project
+.classpath
+.factorypath
+.springBeans
+.sts4-cache/
+
+# IDE - NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# IDE - VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Exceções específicas adicionais
+!.mvn/wrapper/maven-wrapper.jar
+HELP.md
+/.idea/inspectionProfiles/Project_Default.xml

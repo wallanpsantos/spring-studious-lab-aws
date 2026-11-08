@@ -1,0 +1,23 @@
+updates:
+  - package-ecosystem: "maven"
+    directory: "/"  # Diretório onde o pom.xml está localizado
+    schedule:
+      interval: "daily"
+      time: "04:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+    ignore:
+      - dependency-name: "org.springframework.boot"
+        versions: [ "3.x.x" ]  # Ignorar versões específicas
+
+  - package-ecosystem: "github-actions"
+    directory: "/"  # Diretório onde os arquivos de workflow estão localizados
+    schedule:
+      interval: "daily"
+      time: "05:00"
+      timezone: "America/Sao_Paulo"
+    open-pull-requests-limit: 10
+    rebase-strategy: "auto"
+    # Removi o campo "ignore" para github-actions, já que ele está vazio
+    #ignore: [ ]

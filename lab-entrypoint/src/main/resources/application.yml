@@ -1,0 +1,38 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: lab-entrypoint
+  banner:
+    charset: UTF-8
+    location: banner.txt
+  jackson:
+    default-property-inclusion: non_null
+  data:
+    mongodb:
+      # No host, o padrão aponta para o Mongo publicado em localhost.
+      # O Compose sobrescreve MONGODB_URI com o hostname mongo-dev.
+      uri: ${MONGODB_URI:mongodb://root:qwe123@localhost:27017/spring-studious-lab-aws-database?authSource=admin}
+  cloud:
+    aws:
+      credentials:
+        access-key: ${AWS_ACCESS_KEY_ID:test}
+        secret-key: ${AWS_SECRET_ACCESS_KEY:test}
+      region:
+        static: ${AWS_REGION:us-east-1}
+      # Um endpoint só, aplicado a SQS, SNS e S3. Local no host; o Compose aponta para o container.
+      endpoint: ${AWS_ENDPOINT:http://localhost:4566}
+
+app:
+  sqs:
+    queues:
+      partial: ${SQS_QUEUE_PARTIAL:payment-partial-queue}
+      total: ${SQS_QUEUE_TOTAL:payment-total-queue}
+      overmeasure: ${SQS_QUEUE_OVERMEASURE:payment-overmeasure-queue}
+
+logging:
+  level:
+    root: ${LOGGING_LEVEL:info}
+    org.springframework.data.mongodb.core.MongoTemplate: INFO
+    org.springframework.data.mongodb.repository.query: INFO
